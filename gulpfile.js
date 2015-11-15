@@ -1,24 +1,37 @@
+'use strict'
+
 var gulp = require('gulp')
 var browserify = require('browserify')
-var babelify = require('babelify')
 var source = require('vinyl-source-stream')
+var babelify = require("babelify")
 
-var BASE_URI = ''
-
-gulp.task('browserify', function() {
-  return browserify(BASE_URI + 'assets/js/app.jsx')
-    .transform(babelify, {presets: ['es2015', 'react']})
-    .bundle()
-    .on('error', function(err) { console.log(err.message) })
-    .pipe(source('bundle.js'))
-    .pipe(gulp.dest(BASE_URI + 'assets-build/js'))
+/**
+ * 分块打包
+ * https://github.com/sogko/gulp-recipes/blob/master/browserify-separating-app-and-vendor-bundles/gulpfile.js
+ */
+gulp.task('build-app', () => {
+  browserify('assets/js/app.jsx', {
+    debug: true
+  }).transform(babelify, {presets: ["es2015", "react"]})
+  .external(['react', 'react-dom', 'react-router'])
+  .bundle()
+  .pipe(source('app.js'))
+  .pipe(gulp.dest('assets-build/js'))
 })
 
-gulp.task('watch', function() {
-  var watcher = gulp.watch(BASE_URI + 'assets/js/**/*.jsx', ['browserify'])
-  watcher.on('change', function() {
-    console.log('bundle regenerated...')
+gulp.task('build-vendor', () => {
+  var deps = ['react', 'react-dom', 'react-router']
+  var b = browserify()
+  deps.forEach((x) => {
+    b.require(require.resolve(x), {
+      expose: x
+    })
   })
+  b.bundle()
+  .pipe(source('common.js'))
+  .pipe(gulp.dest('assets-build/js'))
 })
 
-gulp.task('default', ['browserify', 'watch'])
+gulp.task('default', () => {
+
+})
