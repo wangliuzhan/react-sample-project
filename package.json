@@ -9,7 +9,12 @@
     "babel",
     "react-starter"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "gulp",
+    "build-app": "gulp build-app",
+    "build-common": "gulp build-common",
+    "watch": "gulp watch"
+  },
   "author": "simonxu",
   "license": "MIT",
   "dependencies": {
