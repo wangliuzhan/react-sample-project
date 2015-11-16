@@ -9,12 +9,21 @@ var minifyCss = require('gulp-minify-css')
 var rename = require('gulp-rename')
 var uglify = require('gulp-uglify')
 var del = require('del')
+var replace = require('gulp-html-replace')
+var hasher = require('gulp-hasher')
+var path = require('path')
 
 var onError = (err) => {
   throw err
 }
 var renameFunc = (x) => {
   x.basename += '.min'
+}
+
+function getHash(filepath) {
+  var hashes = hasher.hashes
+  var realpath = path.resolve(__dirname, filepath)
+  return filepath + '?v=' + hashes[realpath]
 }
 
 /**
@@ -74,6 +83,27 @@ gulp.task('minify-js', ['build-app', 'build-common', 'clean-js'], () => {
     .pipe(gulp.dest('assets-build'))
 })
 
+gulp.task('hasher', ['minify-js', 'minify-css'], () => {
+  return gulp.src('assets-build/**/*.min.*')
+    .pipe(hasher())
+})
+
+gulp.task('publish', ['hasher'], () => {
+  var opts = {
+    css: [
+      getHash('assets-build/css/index.min.css')
+    ],
+    js: [
+      getHash('assets-build/js/common.min.js'),
+      getHash('assets-build/js/app.min.js')
+    ]
+  }
+  return gulp.src('pages/index-dev.html')
+    .pipe(replace(opts))
+    .pipe(rename((x) => x.basename = x.basename.replace('-dev', '')))
+    .pipe(gulp.dest('pages'))
+})
+
 // 监测jsx变化，实时编译js文件
 gulp.task('watch', function() {
   var watcher = gulp.watch('assets/js/**/*.jsx', ['build-app'])
@@ -82,4 +112,4 @@ gulp.task('watch', function() {
   })
 })
 
-gulp.task('default', ['minify-js', 'minify-css'])
+gulp.task('default', ['publish'])
