@@ -5,7 +5,7 @@ export default React.createClass({
     console.log(this.props.params)
 
     return (
-      <div>
+      <div className="txt-red">
         event
       </div>
     )

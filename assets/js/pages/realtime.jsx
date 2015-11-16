@@ -5,8 +5,11 @@ export default React.createClass({
     console.log(this.props.params)
 
     return (
-      <div>
+      <div className="txt-blue">
         realtime
+        <br />
+        
+        <a href={'#/event/' + this.props.params.appID}>Go to event</a>
       </div>
     )
   }

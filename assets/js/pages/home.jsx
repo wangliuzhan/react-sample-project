@@ -22,7 +22,7 @@ export default React.createClass({
     })
 
     var gameCenter =  (
-      <table>
+      <table className="table table-bordered">
         <thead>
           <tr>
             <th>游戏名称</th>
