@@ -23,7 +23,7 @@ var renameFunc = (x) => {
 function getHash(filepath) {
   var hashes = hasher.hashes
   var realpath = path.resolve(__dirname, filepath)
-  return filepath + '?v=' + hashes[realpath]
+  return '../' + filepath + '?v=' + hashes[realpath]
 }
 
 /**

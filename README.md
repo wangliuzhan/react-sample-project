@@ -17,7 +17,7 @@ Atom / WebStorm
 
 ## 安装 Install
 
-所有的前端资源都依赖于 `npm`，开发阶段资源直接引用 `node_modules` 中的资源文件
+前端资源依赖于 `npm`，开发阶段资源直接引用 `node_modules` 中的资源文件
 
 ```bash
 npm install
@@ -31,10 +31,23 @@ npm install
 npm run watch
 ```
 
+入口页面 pages/index-dev.html
+
 ## 发布 Build
 
 ```bash
-npm build
+npm run build (gulp)
 ```
 
-发布后会生成assets-build目录，里面包含合并打包的代码
+build改动:
+
+> * 生成assets-build
+> * 生成pages/index.html
+
+## 运行 Run
+
+运行一个本地静态服务器查看demo，可能需要先 `npm install -g puer`
+
+```bash
+puer .
+```
