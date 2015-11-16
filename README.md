@@ -1,2 +1,4 @@
 # react-sample-project
-a sample project for learning react
+
+A sample project for learning React.
+Using browserify and gulp to build project.
