@@ -2,6 +2,10 @@
   "name": "react-sample-project",
   "version": "0.0.1",
   "description": "a sample project for react and browserify users",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FEWorkflow/react-sample-project"
+  },
   "keywords": [
     "gulp",
     "react",
@@ -30,11 +34,14 @@
     "babelify": "^7.2.0",
     "bootstrap": "^3.3.5",
     "browserify": "^12.0.1",
+    "del": "^2.1.0",
     "eslint": "^1.9.0",
     "eslint-plugin-react": "^3.8.0",
     "gulp": "^3.9.0",
     "gulp-concat-css": "^2.2.0",
-    "gulp-html-replace": "^1.5.4",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

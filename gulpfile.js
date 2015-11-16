@@ -5,12 +5,17 @@ var browserify = require('browserify')
 var source = require('vinyl-source-stream')
 var babelify = require('babelify')
 var concatCss = require('gulp-concat-css')
+var minifyCss = require('gulp-minify-css')
+var rename = require('gulp-rename')
+var uglify = require('gulp-uglify')
+var del = require('del')
 
 var onError = (err) => {
   throw err
 }
-
-// process.env.NODE_ENV = 'development'
+var renameFunc = (x) => {
+  x.basename += '.min'
+}
 
 /**
  * 分块打包
@@ -47,6 +52,28 @@ gulp.task('build-css', () => {
     .pipe(gulp.dest('assets-build/css'))
 })
 
+gulp.task('clean-css', (cb)=> {
+  del(['assets-build/css/*.min.css']).then(() => cb())
+})
+
+gulp.task('clean-js', (cb)=> {
+  del(['assets-build/js/*.min.js']).then(() => cb())
+})
+
+gulp.task('minify-css', ['build-css', 'clean-css'], () => {
+  return gulp.src('assets-build/**/*.css')
+    .pipe(minifyCss({compatibility: 'ie8'}))
+    .pipe(rename(renameFunc))
+    .pipe(gulp.dest('assets-build'))
+})
+
+gulp.task('minify-js', ['build-app', 'build-common', 'clean-js'], () => {
+  return gulp.src('assets-build/**/*.js')
+    .pipe(uglify())
+    .pipe(rename(renameFunc))
+    .pipe(gulp.dest('assets-build'))
+})
+
 // 监测jsx变化，实时编译js文件
 gulp.task('watch', function() {
   var watcher = gulp.watch('assets/js/**/*.jsx', ['build-app'])
@@ -55,4 +82,4 @@ gulp.task('watch', function() {
   })
 })
 
-gulp.task('default', ['build-app', 'build-common'])
+gulp.task('default', ['minify-js', 'minify-css'])
