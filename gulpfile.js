@@ -12,6 +12,8 @@ var del = require('del')
 var replace = require('gulp-html-replace')
 var hasher = require('gulp-hasher')
 var path = require('path')
+var pkg = require('./package.json')
+var deps = Object.keys(pkg.dependencies)
 
 process.env.NODE_ENV = 'development'
 
@@ -35,7 +37,7 @@ function getHash(filepath) {
 gulp.task('build-app', () => {
   return browserify('assets/js/index.jsx')
   .transform(babelify, {presets: ["es2015", "react"]})
-  .external(['react', 'react-dom', 'react-router'])
+  .external(deps)
   .bundle()
   .on('error', onError)
   .pipe(source('app.js'))
@@ -43,7 +45,6 @@ gulp.task('build-app', () => {
 })
 
 gulp.task('build-common', () => {
-  var deps = ['react', 'react-dom', 'react-router']
   var b = browserify()
   deps.forEach((x) => {
     b.require(require.resolve(x), {

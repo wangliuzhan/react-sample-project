@@ -1,6 +1,8 @@
 import React from 'react'
 import Tabs from '../components/tabs.jsx'
 import ajax from 'reqwest'
+import Table from 'rc-table'
+import _ from 'lodash'
 import * as utils from '../utils/utils.jsx'
 
 var Panel = React.createClass({
@@ -27,6 +29,11 @@ var Panel = React.createClass({
       // 默认展示模式（图形或者表格）
       mode: 'chart'
     }
+  },
+
+  componentDidMount() {
+    // TODO 使用标准API
+    this.refs.mainTab.refs.child0.click()
   },
 
   render() {
@@ -62,6 +69,7 @@ var Panel = React.createClass({
             </div>
 
             <div className="panel-table">
+              {this.getDataGrid()}
             </div>
 
             <div className="panel-chart">
@@ -85,14 +93,15 @@ var Panel = React.createClass({
       this.setState({
         datalist: response.content,
         glance: response.glance,
-        labels: response.name
+        labels: response.name,
+        tabName: item.name
       })
     })
   },
 
   // 生成Tabs
   getTabs(items) {
-    return <Tabs items={items} onTabClick={this.handleTabClick}/>
+    return <Tabs ref="mainTab" name="child" items={items} onTabClick={this.handleTabClick}/>
   },
 
   // 生成概览数据
@@ -115,8 +124,23 @@ var Panel = React.createClass({
     return <div className="panel-glance">{label} {value}</div>
   },
 
-  // TODO 生成分页表格
+  // TODO 是否可能支持mustache模板配置
   getDataGrid() {
+    var config = _.find(this.props.tabs, {name: this.state.tabName})
+    config = config || this.props.tabs[0]
+
+    if (!config.table) {
+      throw new Error('缺少列配置信息:cols')
+    }
+
+    return (
+      <Table columns={config.table} data={this.state.datalist} className="table">
+      </Table>
+    )
+  },
+
+  // TODO 完成分页
+  getPager() {
 
   },
 
