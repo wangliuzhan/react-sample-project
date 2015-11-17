@@ -13,7 +13,7 @@ export default React.createClass({
 
     return (
       <div id="header">
-        <h1>React sample Project</h1>
+        <h1>React sample project</h1>
         {appIDSwitcher}
       </div>
     )

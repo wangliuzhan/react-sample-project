@@ -13,6 +13,8 @@ var replace = require('gulp-html-replace')
 var hasher = require('gulp-hasher')
 var path = require('path')
 
+process.env.NODE_ENV = 'development'
+
 var onError = (err) => {
   throw err
 }
@@ -105,7 +107,7 @@ gulp.task('publish', ['hasher'], () => {
 })
 
 // 监测jsx变化，实时编译js文件
-gulp.task('watch', function() {
+gulp.task('watch', ['build-app'], function() {
   var watcher = gulp.watch('assets/js/**/*.jsx', ['build-app'])
   watcher.on('change', function() {
     console.log('检测到jsx文件内容变化，更新中...')
