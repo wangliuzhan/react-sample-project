@@ -2,33 +2,50 @@ import React, {PropTypes} from 'react'
 import Tabs from '../components/tabs.jsx'
 import ajax from 'reqwest'
 import Table from 'rc-table'
-import _ from 'lodash'
+import Pagination from 'rc-pagination'
 import * as utils from '../utils/utils.jsx'
 
 export default React.createClass({
   propTypes: {
-    mode: PropTypes.oneof(['table', 'chart']),
     title: PropTypes.any.isRequired,
-    tabs: PropTypes.array.isRequired
+    tabs: PropTypes.array.isRequired,
+    mode: PropTypes.oneOf(['table', 'chart']),
+    index: PropTypes.array,
+    server: PropTypes.bool,
+    download: PropTypes.bool,
+    fullscreen: PropTypes.bool
   },
 
   getDefaultProps() {
     return {
+      title: '',
+      tabs: [],
+      // 默认展示模式（图形或者表格）
+      mode: 'chart',
       // 指标说明
       index: [],
+      // 服务端分页
+      server: false,
       // 是否可以下载
       download: true,
       // 是否可以全屏
       fullscreen: true,
-      // 默认展示模式（图形或者表格）
-      mode: 'chart'
     }
   },
 
   getInitialState() {
     return {
-      // 表格数据源
-      datalist: [],
+      // 服务器源数据
+      json: {
+        content: []
+      },
+      pageNum: 1,
+      pageSize: 1,
+      // 一级tab选中项目
+      selectedTabIndex: 0,
+      // 二级tab选中项目
+      selectedSubTabIndex: 0,
+      // 图形表格切换
       mode: this.props.mode === 'table' ? 'table' : 'chart',
       // 数据概览
       glance: [],
@@ -38,13 +55,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    // TODO 使用标准API
     this.refs.mainTab.refs.child0.click()
-  },
-
-  // 生成Tabs
-  getTabs(items) {
-    return <Tabs ref="mainTab" name="child" items={items} onTabClick={this.handconstabClick}/>
   },
 
   // 生成概览数据
@@ -68,23 +79,60 @@ export default React.createClass({
     return <div className="panel-glance">{label} {value}</div>
   },
 
-  // TODO 是否可能支持mustache模板配置
+  /**
+   * 获取翻页数据
+   */
+  getPagedData() {
+    const json = this.state.json
+    if (!json.content) return []
+
+    let datalist
+    if (!this.props.server) {
+      const start = (this.state.pageNum - 1) * this.state.pageSize
+      const end = start + this.state.pageSize
+      datalist = json.content.slice(start, end)
+    } else {
+      datalist = json.content
+    }
+
+    return datalist
+  },
+
+  getTotal() {
+    return this.props.server ? this.state.json.content.totalRecord : this.state.json.content.length
+  },
+
   getDataGrid() {
-    let config = _.find(this.props.tabs, {name: this.state.tabName})
-    config = config || this.props.tabs[0]
+    const config = this.props.tabs[this.state.selectedTabIndex]
 
     if (!config.table) {
       throw new Error('缺少列配置信息:cols')
     }
 
     return (
-      <Table columns={config.table} data={this.state.datalist} className="table" />
+      <Table columns={config.table} data={this.getPagedData()} className="table" />
     )
   },
 
-  // TODO 完成分页
   getPager() {
+    return (
+      <Pagination total={this.getTotal()} current={this.state.pageNum}
+        pageSize={this.state.pageSize} onChange={this.onPageChange}
+      />
+    )
+  },
 
+  onPageChange(pageNum) {
+    this.setState({
+      pageNum: pageNum
+    })
+
+    if (this.props.server) {
+      // 找到当前tab
+      // TODO 支持二级Tab
+      const tab = this.props.tabs[this.state.selectedTabIndex]
+      this.onTabClick(tab, this.state.selectedTabIndex)
+    }
   },
 
   // TODO 开始画图
@@ -92,18 +140,28 @@ export default React.createClass({
 
   },
 
-  handconstabClick(item, i) {
+  onTabClick(item, i) {
     ajax({
       url: item.url,
-      data: utils.tryExec(item.data)
+      data: utils.tryExec(item.data),
+      pageID: this.state.pageNum,
+      pageSize: this.state.pageSize
     }).then((response) => {
       this.setState({
-        datalist: response.content,
+        json: response,
         glance: response.glance,
         labels: response.name,
-        tabName: item.name
+        // 翻页和子tab索引位置都需要更新
+        pageNum: 1,
+        selectedTabIndex: i,
+        selectedSubTabIndex: 0
       })
     })
+  },
+
+  // 生成Tabs
+  getTabs(items) {
+    return <Tabs ref="mainTab" name="child" items={items} onTabClick={this.onTabClick}/>
   },
 
   // 切换表格图表
@@ -149,6 +207,7 @@ export default React.createClass({
 
             <div className="panel-table">
               {this.getDataGrid()}
+              {this.getPager()}
             </div>
 
             <div className="panel-chart">

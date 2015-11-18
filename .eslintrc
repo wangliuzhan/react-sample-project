@@ -24,6 +24,7 @@
     "no-undef": 2,
     "no-unused-vars": [2, { "vars": "all", "args": "none" }],
     "babel/object-shorthand": 0,
+    "react/sort-comp": 0,
     "space-after-keywords": 0,
     "space-before-blocks": 0,
     "space-before-function-paren": 0,
