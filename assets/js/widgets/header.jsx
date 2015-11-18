@@ -1,15 +1,17 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 
 export default React.createClass({
+  propTypes: {
+    appID: PropTypes.string
+  },
+
   render() {
-    var appIDSwitcher = this.props.appID ? (
+    const appIDSwitcher = this.props.appID ? (
       <select>
         <option>appID1</option>
         <option>appID2</option>
       </select>
     ) : ''
-
-    console.log('header')
 
     return (
       <div id="header">

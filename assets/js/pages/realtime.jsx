@@ -1,15 +1,19 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import Panel from '../widgets/panel.jsx'
 
 export default React.createClass({
+  propTypes: {
+    
+  },
+
   render() {
-    var cols = [
-      {title: '国家', dataIndex: 'x', key:'x',width: 100},
+    const cols = [
+      {title: '国家', dataIndex: 'x', key:'x', width: 100},
       {title: '付费金额', dataIndex: 'y0', key:'y0', width: 100},
-      {title: '付费次数', dataIndex: 'y1',  key:'y1',width: 200}
+      {title: '付费次数', dataIndex: 'y1', key:'y1', width: 200}
     ]
 
-    var tabs = [
+    const tabs = [
       {
         label: '国家留存',
         name: 'player',

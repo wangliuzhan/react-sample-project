@@ -1,15 +1,19 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import Header from '../widgets/header.jsx'
 import Footer from '../widgets/footer.jsx'
 
 export default React.createClass({
+  propTypes: {
+    children: PropTypes.any
+  },
+
   render() {
-    var games = [
+    const games = [
       {appID: '1a', name: '权利的游戏'},
       {appID: '2b', name: '邪恶力量'}
     ]
 
-    var tbody = games.map((item) => {
+    const tbody = games.map((item) => {
       return (
         <tr key={item.appID}>
           <td>{item.name}</td>
@@ -21,7 +25,7 @@ export default React.createClass({
       )
     })
 
-    var gameCenter =  (
+    const gameCenter = (
       <table className="table table-bordered">
         <thead>
           <tr>

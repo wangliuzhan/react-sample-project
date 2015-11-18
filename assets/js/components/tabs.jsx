@@ -1,6 +1,13 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 
-var Tabs = React.createClass({
+export default React.createClass({
+  propTypes: {
+    onTabClick: PropTypes.func.isRequired,
+    items: PropTypes.array.isRequired,
+    name: PropTypes.string,
+    className: PropTypes.string
+  },
+
   getDefaultProps() {
     return {
       name: 'tab',
@@ -23,7 +30,7 @@ var Tabs = React.createClass({
   },
 
   render() {
-    var items = (
+    const items = (
       this.props.items.map((item, i) => {
         return (
           <li className={this.state.selectedIndex === i ? 'active' : ''}
@@ -43,5 +50,3 @@ var Tabs = React.createClass({
     )
   }
 })
-
-export default Tabs
