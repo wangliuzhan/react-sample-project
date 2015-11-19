@@ -13,13 +13,13 @@ export default React.createClass({
     index: PropTypes.array,
     server: PropTypes.bool,
     download: PropTypes.bool,
-    fullscreen: PropTypes.bool
+    fullscreen: PropTypes.bool,
+    // 数据转换函数
+    transform: PropTypes.func
   },
 
   getDefaultProps() {
     return {
-      title: '',
-      tabs: [],
       // 默认展示模式（图形或者表格）
       mode: 'chart',
       // 指标说明
@@ -55,11 +55,14 @@ export default React.createClass({
   },
 
   componentDidMount() {
+    // 首次渲染时自动请求第一个Tab
     this.refs.mainTab.refs.child0.click()
   },
 
   // 生成概览数据
   getGlance() {
+    if (!this.state.glance) return ''
+
     const labels = []
     const values = []
     this.state.glance.forEach((item) => {
@@ -92,16 +95,19 @@ export default React.createClass({
       const end = start + this.state.pageSize
       datalist = json.content.slice(start, end)
     } else {
-      datalist = json.content
+      datalist = json.content.content
     }
 
     return datalist
   },
 
+  // 获取总页数
   getTotal() {
-    return this.props.server ? this.state.json.content.totalRecord : this.state.json.content.length
+    let data = this.state.json.content
+    return this.props.server ? data.totalPage : Math.ceil(data.length / this.state.pageSize)
   },
 
+  // 生成表格组件
   getDataGrid() {
     const config = this.props.tabs[this.state.selectedTabIndex]
 
@@ -114,6 +120,7 @@ export default React.createClass({
     )
   },
 
+  // 生成翻页组件
   getPager() {
     return (
       <Pagination total={this.getTotal()} current={this.state.pageNum}
@@ -122,16 +129,16 @@ export default React.createClass({
     )
   },
 
+  // 分页事件（服务端和客户端有所区别）
   onPageChange(pageNum) {
-    this.setState({
-      pageNum: pageNum
-    })
-
     if (this.props.server) {
-      // 找到当前tab
       // TODO 支持二级Tab
       const tab = this.props.tabs[this.state.selectedTabIndex]
-      this.onTabClick(tab, this.state.selectedTabIndex)
+      this.onTabClick(tab, this.state.selectedTabIndex, pageNum)
+    } else {
+      this.setState({
+        pageNum: pageNum
+      })
     }
   },
 
@@ -140,26 +147,32 @@ export default React.createClass({
 
   },
 
-  onTabClick(item, i) {
+  // tab切换事件（客户端分页只在tab切换时调用，服务端分页会在页码切换时也调用）
+  onTabClick(item, i, pageNum) {
+    let params = utils.tryExec(item.data) || {}
+    // 服务端翻页时会多传一个页码参数
+    if (this.props.server) {
+      params.pageID = typeof pageNum === 'number' ? pageNum : 1
+      params.pageSize = this.state.pageSize
+    }
+
     ajax({
       url: item.url,
-      data: utils.tryExec(item.data),
-      pageID: this.state.pageNum,
-      pageSize: this.state.pageSize
+      data: params
     }).then((response) => {
       this.setState({
-        json: response,
+        json: this.props.transform ? this.props.transform(response) : response,
         glance: response.glance,
         labels: response.name,
-        // 翻页和子tab索引位置都需要更新
-        pageNum: 1,
+        // 客户端分页读取当前页码id
+        pageNum: params.pageID || this.state.pageID,
         selectedTabIndex: i,
         selectedSubTabIndex: 0
       })
     })
   },
 
-  // 生成Tabs
+  // 生成Tabs组件
   getTabs(items) {
     return <Tabs ref="mainTab" name="child" items={items} onTabClick={this.onTabClick}/>
   },
