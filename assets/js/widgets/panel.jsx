@@ -3,8 +3,10 @@ import Tabs from '../components/tabs.jsx'
 import Loading from '../components/loading.jsx'
 import ajax from 'reqwest'
 import Table from 'rc-table'
+import Chart from 'react-highcharts'
 import Pagination from 'rc-pagination'
 import * as utils from '../utils/utils.jsx'
+import * as chartHelps from '../helpers/chart.jsx'
 
 export default React.createClass({
   propTypes: {
@@ -105,12 +107,16 @@ export default React.createClass({
     return this.props.server ? data.totalPage : Math.ceil(data.length / this.state.pageSize)
   },
 
+  getCurrentTab() {
+    return this.props.tabs[this.state.selectedTabIndex]
+  },
+
   // 生成表格组件
   getDataGrid() {
-    const config = this.props.tabs[this.state.selectedTabIndex]
+    const config = this.getCurrentTab()
 
     if (!config.table) {
-      throw new Error('缺少列配置信息:cols')
+      return ''
     }
 
     return (
@@ -140,9 +146,13 @@ export default React.createClass({
     }
   },
 
-  // TODO 开始画图
   getChart() {
+    let tab = this.getCurrentTab()
+    if (!tab.chart) return ''
 
+    // TODO 处理数据与表格配置
+    let config = tab.chart
+    return <Chart config={config} />
   },
 
   // tab切换事件（客户端分页只在tab切换时调用，服务端分页会在页码切换时也调用）
@@ -195,6 +205,17 @@ export default React.createClass({
   },
 
   render() {
+    let tableOrChart = this.state.mode === 'table' ? (
+      <div className="panel-table">
+        {this.getDataGrid()}
+        {this.getPager()}
+      </div>
+    ) : (
+      <div className="panel-chart">
+        {this.getChart()}
+      </div>
+    )
+
     return (
       <div className="panel-wrapper">
         <div className="panel panel-primary">
@@ -227,14 +248,7 @@ export default React.createClass({
                 </a>
               </div>
 
-              <div className="panel-table">
-                {this.getDataGrid()}
-                {this.getPager()}
-              </div>
-
-              <div className="panel-chart">
-
-              </div>
+              {tableOrChart}
             </Loading>
           </div>
 

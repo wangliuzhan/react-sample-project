@@ -23,12 +23,14 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^3.3.5",
+    "highcharts-release": "^4.1.9",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
     "rc-pagination": "^1.2.1",
     "rc-table": "^3.6.1",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
+    "react-highcharts": "^5.0.4",
     "react-router": "^1.0.0",
     "reqwest": "^2.0.5"
   },
