@@ -148,7 +148,8 @@ export default React.createClass({
 
   getChart() {
     let tab = this.getCurrentTab()
-    if (!tab.chart) return ''
+    // if (!tab.chart)
+    return ''
 
     // TODO 处理数据与表格配置
     let config = tab.chart

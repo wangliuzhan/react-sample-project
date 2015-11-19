@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import * as utils from '../utils/utis.jsx'
+import * as utils from '../utils/utils.jsx'
 
 function transfrom2PieData(data) {
   return _.map(data.content, (item) => {

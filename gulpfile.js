@@ -1,5 +1,4 @@
-'use strict'
-
+/*eslint-disable */
 var gulp = require('gulp')
 var browserify = require('browserify')
 var source = require('vinyl-source-stream')
@@ -58,6 +57,12 @@ gulp.task('build-common', () => {
   .pipe(gulp.dest('assets-build/js'))
 })
 
+gulp.task('build-charts', () => {
+  // TODO 合并
+  return gulp.src('assets/js/libs/*.js')
+  .pipe(gulp.dest('assets-build/js'))
+})
+
 gulp.task('build-css', () => {
   return gulp.src(['node_modules/bootstrap/dist/css/bootstrap.css', 'assets/css/*.css'])
     .pipe(concatCss("index.css"))
@@ -79,7 +84,7 @@ gulp.task('minify-css', ['build-css', 'clean-css'], () => {
     .pipe(gulp.dest('assets-build'))
 })
 
-gulp.task('minify-js', ['build-app', 'build-common', 'clean-js'], () => {
+gulp.task('minify-js', ['build-app', 'build-common', 'build-charts', 'clean-js'], () => {
   return gulp.src('assets-build/**/*.js')
     .pipe(uglify())
     .pipe(rename(renameFunc))
@@ -98,6 +103,7 @@ gulp.task('publish', ['hasher'], () => {
     ],
     js: [
       getHash('assets-build/js/common.min.js'),
+      getHash('assets-build/js/highcharts.min.js'),
       getHash('assets-build/js/app.min.js')
     ]
   }
