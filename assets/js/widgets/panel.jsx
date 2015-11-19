@@ -3,10 +3,9 @@ import Tabs from '../components/tabs.jsx'
 import Loading from '../components/loading.jsx'
 import ajax from 'reqwest'
 import Table from 'rc-table'
-import Chart from 'react-highcharts'
 import Pagination from 'rc-pagination'
 import * as utils from '../utils/utils.jsx'
-import * as chartHelps from '../helpers/chart.jsx'
+import Chart from './chart.jsx'
 
 export default React.createClass({
   propTypes: {
@@ -32,7 +31,7 @@ export default React.createClass({
       // 是否可以下载
       download: true,
       // 是否可以全屏
-      fullscreen: true,
+      fullscreen: true
     }
   },
 
@@ -148,12 +147,9 @@ export default React.createClass({
 
   getChart() {
     let tab = this.getCurrentTab()
-    // if (!tab.chart)
-    return ''
+    if (!tab.chart) return ''
 
-    // TODO 处理数据与表格配置
-    let config = tab.chart
-    return <Chart config={config} />
+    return <Chart data={this.state.json} type={tab.chartType} options={tab.chart} />
   },
 
   // tab切换事件（客户端分页只在tab切换时调用，服务端分页会在页码切换时也调用）

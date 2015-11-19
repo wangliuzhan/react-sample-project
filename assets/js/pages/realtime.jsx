@@ -15,6 +15,7 @@ export default React.createClass({
         data: {
           uid: 1
         },
+        chartType: 'pie',
         chart: {
 
         },
@@ -34,6 +35,7 @@ export default React.createClass({
         label: '城市留存',
         name: 'pay',
         url: '/mock/server.json',
+        chartType: 'pie',
         data: function() {
           return {
             uid: 1,
@@ -59,7 +61,6 @@ export default React.createClass({
         <h2>Page - Realtime</h2>
         <br />
         <Panel tabs={tabs} title="付费分析(客户端分页)" />
-        <Panel tabs={tabs1} title="自定义事件(服务端分页)" server />
         <a href={'#/event/' + this.props.params.appID}>Go to event</a>
       </div>
     )
