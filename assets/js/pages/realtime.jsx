@@ -19,10 +19,13 @@ export default React.createClass({
 
         },
         table: [
-          {title: '国家', dataIndex: 'x', key:'x', width: 100},
-          {title: '付费金额', dataIndex: 'y0', key:'y0', width: 100},
-          {title: '付费次数', dataIndex: 'y1', key:'y1', width: 200}
-        ]
+          {title: '国家', dataIndex: 'x', key:'1', width: 100},
+          {title: '付费金额', dataIndex: 'y0', key:'2', width: 100},
+          {title: '付费次数', dataIndex: 'y1', key:'3', width: 200}
+        ],
+        rowKey: (row) => {
+          return row.id
+        }
       }
     ]
 
@@ -41,10 +44,13 @@ export default React.createClass({
 
         },
         table: [
-          {title: '事件名称', dataIndex: 'eventName', key:'0', width: 100},
-          {title: '昨日消息数', dataIndex: 'yesterdayMsgCount', key:'1', width: 100},
-          {title: '今日消息数', dataIndex: 'todayMsgCount', key:'2', width: 200}
-        ]
+          {title: '事件名称', dataIndex: 'eventName', key: '1', width: 100},
+          {title: '昨日消息数', dataIndex: 'yesterdayMsgCount', key: '2', width: 100},
+          {title: '今日消息数', dataIndex: 'todayMsgCount', key: '3', width: 200}
+        ],
+        rowKey: (row) => {
+          return row.eventID
+        }
       }
     ]
 

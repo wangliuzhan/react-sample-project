@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import Tabs from '../components/tabs.jsx'
+import Loading from '../components/loading.jsx'
 import ajax from 'reqwest'
 import Table from 'rc-table'
 import Pagination from 'rc-pagination'
@@ -39,6 +40,8 @@ export default React.createClass({
       json: {
         content: []
       },
+      // 是否正在加载数据
+      isLoading: true,
       pageNum: 1,
       pageSize: 1,
       // 一级tab选中项目
@@ -87,18 +90,13 @@ export default React.createClass({
    */
   getPagedData() {
     const json = this.state.json
-    if (!json.content) return []
-
-    let datalist
-    if (!this.props.server) {
-      const start = (this.state.pageNum - 1) * this.state.pageSize
-      const end = start + this.state.pageSize
-      datalist = json.content.slice(start, end)
-    } else {
-      datalist = json.content.content
+    if (this.props.server) {
+      return json.content.content
     }
 
-    return datalist
+    const start = (this.state.pageNum - 1) * this.state.pageSize
+    const end = start + this.state.pageSize
+    return json.content.slice(start, end)
   },
 
   // 获取总页数
@@ -116,7 +114,7 @@ export default React.createClass({
     }
 
     return (
-      <Table columns={config.table} data={this.getPagedData()} className="table" />
+      <Table columns={config.table} data={this.getPagedData()} className="table" rowKey={config.rowKey} />
     )
   },
 
@@ -149,6 +147,10 @@ export default React.createClass({
 
   // tab切换事件（客户端分页只在tab切换时调用，服务端分页会在页码切换时也调用）
   onTabClick(item, i, pageNum) {
+    this.setState({
+      isLoading: true
+    })
+
     let params = utils.tryExec(item.data) || {}
     // 服务端翻页时会多传一个页码参数
     if (this.props.server) {
@@ -165,9 +167,15 @@ export default React.createClass({
         glance: response.glance,
         labels: response.name,
         // 客户端分页读取当前页码id
-        pageNum: params.pageID || this.state.pageID,
+        pageNum: params.pageID || this.state.pageNum,
         selectedTabIndex: i,
-        selectedSubTabIndex: 0
+        selectedSubTabIndex: 0,
+        isLoading: false
+      })
+    }).fail(() => {
+      // TODO 错误处理
+      this.setState({
+        isLoading: false
       })
     })
   },
@@ -195,37 +203,39 @@ export default React.createClass({
           </div>
 
           <div className="panel-body">
-            <div className="panel-primary-tabs">
-              {this.getTabs(this.props.tabs)}
-            </div>
+            <Loading done={!this.state.isLoading}>
+              <div className="panel-primary-tabs">
+                {this.getTabs(this.props.tabs)}
+              </div>
 
-            <div className="panel-secondary-tabs">
-              二级TAB
-            </div>
+              <div className="panel-secondary-tabs">
+                二级TAB
+              </div>
 
-            {this.getGlance()}
+              {this.getGlance()}
 
-            <div className="panel-switcher">
-              <a href="javascript:;"
-                className={'btn btn-default btn-xs ' + (this.state.mode === 'chart' ? 'active' : '')}
-                onClick={this.switchMode}>
-                <i className="fa fa-area-chart"></i>
-              </a>
-              <a href="javascript:;"
-                className={'btn btn-default btn-xs ' + (this.state.mode === 'table' ? 'active' : '')}
-                onClick={this.switchMode}>
-                <i className="fa fa-table"></i>
-              </a>
-            </div>
+              <div className="panel-switcher">
+                <a href="javascript:;"
+                  className={'btn btn-default btn-xs ' + (this.state.mode === 'chart' ? 'active' : '')}
+                  onClick={this.switchMode}>
+                  <i className="fa fa-area-chart"></i>
+                </a>
+                <a href="javascript:;"
+                  className={'btn btn-default btn-xs ' + (this.state.mode === 'table' ? 'active' : '')}
+                  onClick={this.switchMode}>
+                  <i className="fa fa-table"></i>
+                </a>
+              </div>
 
-            <div className="panel-table">
-              {this.getDataGrid()}
-              {this.getPager()}
-            </div>
+              <div className="panel-table">
+                {this.getDataGrid()}
+                {this.getPager()}
+              </div>
 
-            <div className="panel-chart">
+              <div className="panel-chart">
 
-            </div>
+              </div>
+            </Loading>
           </div>
 
           <div className="panel-footer">
