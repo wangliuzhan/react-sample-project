@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import Chart from 'react-highcharts'
+import ReactChart from 'react-highcharts'
 import _ from 'lodash'
 
 function transform2PieData(data) {
@@ -30,11 +30,10 @@ export default React.createClass({
 
   render() {
     let param = this.props.type === 'line' ? this.getLineOptions() : this.getPieOptions()
-    if (!param) return <div>数据为空</div>
+    // TODO 使用公用的暂无数据样式
+    if (!param) return <div>暂无数据</div>
 
-    return (
-      <Chart config={param} />
-    )
+    return <ReactChart config={param} />
   },
 
   getLineOptions() {

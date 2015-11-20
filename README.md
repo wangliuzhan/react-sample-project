@@ -6,6 +6,7 @@ React新手入门示例项目
 
 > * React
 > * React Router
+> * React Highcharts
 > * Browserify
 > * Gulp
 > * Babel
@@ -46,8 +47,16 @@ build改动:
 
 ## 运行 Run
 
-运行一个本地静态服务器查看demo，可能需要先 `npm install -g puer`
+运行一个本地静态服务器查看demo，可能需要先 `npm install -g puer`，然后在项目根目录运行：
 
 ```bash
 puer .
 ```
+
+## 其它
+
+React Highcharts需要先加载highcharts，目前highcharts直接作为全局公共库加载
+
+## 资源推荐
+
+[React入门资源整理](https://github.com/simongfxu/simongfxu.github.com/issues/21)

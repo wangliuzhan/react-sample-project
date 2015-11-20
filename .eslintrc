@@ -32,5 +32,8 @@
     "spaced-comment": 0,
     "vars-on-top": 0,
     "id-length": 0
+  },
+  "globals": {
+    "Highcharts": true
   }
 }
