@@ -56,11 +56,39 @@ export default React.createClass({
       }
     ]
 
+    const tab2 = [
+      {
+        label: '付费次数',
+        name: 'pay',
+        url: '/mock/retain2.json',
+        data: function() {
+          return {
+            uid: 1,
+            appid: 2
+          }
+        },
+        chart: {
+          yAxisRightIndexes: [1],
+          seriesTypes: ['column', 'spline'],
+          // suffix: formatPercentage,
+          yAxisSymbols: ['', '%']
+        },
+        table: [
+          {title: '区间', dataIndex: 'x', key: '1', width: 100},
+          {title: '付费次数', dataIndex: 'y0', key: '2', width: 100},
+          {title: '付费占比', dataIndex: 'y1', key: '3', width: 200}
+        ],
+        rowKey: (row) => {
+          return row.x
+        }
+      }
+    ]
+
     return (
       <div className="txt-blue">
         <h2>Page - Realtime</h2>
         <br />
-        <Panel tabs={tabs} title="付费分析(客户端分页)" />
+        <Panel tabs={tab2} title="付费次数(客户端分页)" />
         <a href={'#/event/' + this.props.params.appID}>Go to event</a>
       </div>
     )
