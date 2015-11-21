@@ -70,6 +70,7 @@ export default React.createClass({
         chart: {
           yAxisRightIndexes: [1],
           seriesTypes: ['column', 'spline'],
+          seriesNames: ['付费次数', '付费占比'],
           // suffix: formatPercentage,
           yAxisSymbols: ['', '%']
         },

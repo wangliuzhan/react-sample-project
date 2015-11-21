@@ -15,7 +15,7 @@ export default React.createClass({
     // TODO 使用公用的暂无数据样式
     if (!param.series.length) return <div>暂无数据</div>
 
-    console.log(param)
+    console.log(JSON.stringify(param, null, ' '))
 
     return <ReactChart config={param} />
   },

@@ -188,11 +188,13 @@ export function transform2PieData(data) {
 export function transform2LineData(data, extraOptions) {
   // x轴的值
   let categories = _.map(data.content, (item) => {
-    return {
-      // NOTE item.x表示横轴的值
-      text: utils.tryTransform(extraOptions.categoryFormatter, item.x),
-      custom: item
-    }
+    // TODO 自定义数据
+    return item.x
+    //return {
+    //  // NOTE item.x表示横轴的值
+    //  text: utils.tryTransform(extraOptions.categoryFormatter, null, item.x),
+    //  custom: item
+    //}
   })
   // x轴为时间序列，只有一条数据是否展示点
   let markerEnabled = categories.length === 1
@@ -208,15 +210,13 @@ export function transform2LineData(data, extraOptions) {
   let yAxisKeys = _.keys(data.name).sort().filter((i) => {
     return i[0] === 'y'
   })
-  let yAxisList = _.map(yAxisKeys, (key, i) => {
+  let yAxisList = _.map(yAxisKeys, (key) => {
     return _.map(data.content, (row) => {
-      let itemValue = row[key] || 0
-      return utils.tryTransform(extraOptions.yAxisFormatter, itemValue)
+      return utils.tryTransform(extraOptions.yAxisFormatter, null, row[key] || 0)
     })
   })
   let series = []
   let yAxis = []
-
   _.each(yAxisList, (item, i) => {
     let index = 1
     let opposite = false
@@ -260,7 +260,7 @@ export function transform2LineData(data, extraOptions) {
 
   if (series.length === 2 && extraOptions.yAxisRightIndexes) {
     delete series[0].yAxis
-    series[1] = 1
+    series[1].yAxis = 1
   }
 
   return {categories, markerEnabled, stacking, tickInterval, cursor, legendEnabled, tooltipFomatter, yAxis, series}
