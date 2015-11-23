@@ -244,6 +244,8 @@ export function transform2PieData(data) {
  * seriesColors {Array<String>} 曲线颜色
  * seriesVisibles {Array<Boolean>} 设置指定曲线的显示与隐藏
  * allowDecimals {Boolean} 是否允许y轴刻度出现小树
+ * tooltipOrderList {Array<String>} tooltip排序字段允许加入自定义的数据
+ * tooltipExtraData {Object} tooltip自定义数据{key: [name, value]}
  */
 export function transform2LineData(data, extraOptions) {
   // x轴的值
