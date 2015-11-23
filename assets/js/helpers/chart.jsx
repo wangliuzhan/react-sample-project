@@ -197,7 +197,7 @@ export function defaultTooltipFormatter(json, rowData, config) {
     }
 
     // y轴value格式化函数
-    let value = config.yAxisFormatter ? config.yAxisFormatter(rawValue, key) : (rawValue || 0)
+    let value = config.tooltipValueFormatter ? config.tooltipValueFormatter(rawValue, key) : (rawValue || 0)
     html += `
     <li>
       <span style="background: ${series.color}" class="${series.type}"></span>
@@ -235,7 +235,6 @@ export function transform2PieData(data) {
  * stacking {Boolean} 是否堆叠
  * onClick {Function} 图表点击事件
  * legendEnabled {Boolean} 是否展示图例，默认为true
- * tooltipFomatter {Function} 【共享】鼠标悬浮提示框，接收2个额外的参数（原始数据，当前行数据、用户原始配置）
  * yAxisFormatter {Function} 【独占】y轴value格式化函数，接收2个额外的参数（y轴value、曲线名称y0,y1等）
  * yAxisLabelsFormatter {Function} 【独占（左右两侧）】纵坐标格式化，接收2个额外的参数（曲线名称、曲线索引）
  * yAxisOppositeList {Array} 指定那些曲线位于右侧 ['y0', 'y1']
@@ -246,6 +245,7 @@ export function transform2PieData(data) {
  * allowDecimals {Boolean} 是否允许y轴刻度出现小树
  * tooltipOrderList {Array<String>} tooltip排序字段允许加入自定义的数据
  * tooltipExtraData {Object} tooltip自定义数据{key: [name, value]}
+ * tooltipValueFormatter {Function} 【独占】tooltip格式化y轴value，接收2个参数：value，name
  */
 export function transform2LineData(data, extraOptions) {
   // x轴的值

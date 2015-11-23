@@ -77,13 +77,19 @@ export default React.createClass({
           tooltipExtraData: {
             'a': ['额外数据', 9527]
           },
+          tooltipValueFormatter: function(value, name) {
+            if (name === 'y1') return (value * 100).toFixed(2) + '%'
+            if (name === 'y0') return value + '次'
+
+            return '$' + value
+          },
           yAxisFormatter: function(value, name) {
             if (name === 'y1') return parseFloat((value * 100).toFixed(2))
 
             return value
           },
           yAxisLabelsFormatter: function(name, index) {
-            return this.value + (name === 'y0' ? '!' : '#')
+            return this.value + (name === 'y0' ? '次' : '%')
           }
         },
         table: [
