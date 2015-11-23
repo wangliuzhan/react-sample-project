@@ -1,3 +1,6 @@
+/**
+ * highcharts配置生成辅助方法
+ */
 import _ from 'lodash'
 import * as utils from '../utils/utils.jsx'
 
@@ -8,6 +11,7 @@ Highcharts.setOptions({
     '#1665bd', '#bd3b47', '#d97707', '#06715d', '#8f2e73', '#7b3499', '#69821c', '#4a498f', '#18851d'
   ],
   lang: {
+    // TODO 多语言版本以及其它基本配置
     noData: '暂无数据'
   }
 })
@@ -165,14 +169,22 @@ export const DEFAULT_PIE_OPTIONS = {
   }
 }
 
-// TODO
-export function defaultTooltipFormatter() {
-  return this.x
-}
+/**
+ * TODO 支持多种类型图表配置（堆叠、分组、前缀后缀等）
+ */
+export function defaultTooltipFormatter(rowData, options) {
+  let data = this.points || [this.point]
+  let html = ''
+  data.forEach((row) => {
+    html += `<li>${row.series.name}: ${row.y}</li>`
+  })
 
-// TODO 纵坐标格式化
-export function defaultYaxisLabelFormatter() {
-  return this.value
+  return `
+    <h5 class="tip-title">${this.x}</h5>
+    <div class="tip-content">
+      <ul class="tip-list">${html}</ul>
+    </div>
+  `
 }
 
 // 转换原始接口数据为饼图数据
@@ -185,16 +197,36 @@ export function transform2PieData(data) {
   })
 }
 
+/**
+ * 格式化函数的【共享】与【独占】
+ * 共享表示全部曲线共用一个formatter
+ * 独占表示每个曲线对应自己的格式化函数
+ *
+ * 配置说明：
+ * categoryFormatter {Function} x轴格式化函数
+ * stacking {Boolean} 是否堆叠
+ * onClick {Function} 图表点击事件
+ * legendEnabled {Boolean} 是否展示图例，默认为true
+ * tooltipFomatter {Function} 【共享】鼠标悬浮提示框，接收2个额外的参数（原始行数据、用户原始配置）
+ * yAxisFormatter {Function} 【独占】y轴value格式化函数，接收3个额外的参数（y轴value、曲线名称、曲线索引）
+ * yAxisLabelsFormatter {Function} 【独占（左右两侧）】纵坐标格式化，接收3个额外的参数（曲线全部数据、曲线名称、曲线索引）
+ * yAxisRightIndexes {Array} 指定那些曲线位于右侧
+ * seriesNames {Array<String>} 曲线名称
+ * seriesTypes {Array<String>} 曲线类型
+ * seriesColors {Array<String>} 曲线颜色
+ * seriesVisibles {Array<Boolean>} 设置指定曲线的显示与隐藏
+ * allowDecimals {Boolean} 是否允许y轴刻度出现小树
+ */
 export function transform2LineData(data, extraOptions) {
   // x轴的值
   let categories = _.map(data.content, (item) => {
-    // TODO 自定义数据
-    return item.x
-    //return {
-    //  // NOTE item.x表示横轴的值
-    //  text: utils.tryTransform(extraOptions.categoryFormatter, null, item.x),
-    //  custom: item
-    //}
+    return {
+      data: item,
+      // 重写tostring，将data对象可以直接获取不需要JSON.parse
+      toString: function() {
+        return utils.tryTransform(extraOptions.categoryFormatter, null, item.x)
+      }
+    }
   })
   // x轴为时间序列，只有一条数据是否展示点
   let markerEnabled = categories.length === 1
@@ -203,16 +235,26 @@ export function transform2LineData(data, extraOptions) {
   // x轴步长
   let tickInterval = Math.ceil(categories.length / 12)
   // 有点击事件鼠标样式为cursor
-  let cursor = !!extraOptions.cursor
+  let cursor = !!extraOptions.onClick
   // 是否展示图例，大部分情况默认为true
   let legendEnabled = utils.asBool(extraOptions.legendEnabled)
-  let tooltipFomatter = defaultTooltipFormatter
+  let tooltipFomatter = function() {
+    let func = extraOptions.tooltipFomatter || defaultTooltipFormatter
+    return func.call(this, this.x.data, extraOptions)
+  }
   let yAxisKeys = _.keys(data.name).sort().filter((i) => {
     return i[0] === 'y'
   })
-  let yAxisList = _.map(yAxisKeys, (key) => {
-    return _.map(data.content, (row) => {
-      return utils.tryTransform(extraOptions.yAxisFormatter, null, row[key] || 0)
+  let yAxisList = _.map(yAxisKeys, (key, i) => {
+    return _.map(data.content, (row, j) => {
+      let value = row[key] || 0
+      if (!extraOptions.yAxisFormatter) return value
+
+      // 根据不同曲线名称来进行不同的格式化
+      // 这里的值必须返回数值，主要用于百分比格式化
+      let transformed = extraOptions.yAxisFormatter(value, key, i)
+      if (typeof transformed !== 'number') throw new Error(`y轴返回值必须为数字：\n原始值:${row[key]}\n曲线名称:${key}\n位置索引${j}`)
+      return transformed
     })
   })
   let series = []
@@ -224,14 +266,18 @@ export function transform2LineData(data, extraOptions) {
       opposite = extraOptions.yAxisRightIndexes.indexOf(i) > -1
       index = i
     }
+    // y轴格式化，额外传递当前曲线的全部数据，以及曲线的对应的name，index
+    let yAxisLabelsFormatter = extraOptions.yAxisLabelsFormatter && function() {
+      return extraOptions.yAxisLabelsFormatter.call(this, item, yAxisKeys[i], i)
+    }
 
     series.push({
       data: item,
-      name: utils.tryGet(extraOptions.seriesNames, i),
-      type: utils.tryGet(extraOptions.seriesTypes, i),
+      // 如果重新定义了则优先取配置，不然自动获取name属性配置
+      name: utils.tryGet(extraOptions.seriesNames, i) || data.name['y' + i],
+      type: utils.tryGet(extraOptions.seriesTypes, i) || 'line',
       color: utils.tryGet(extraOptions.seriesColors, i),
-      // TODO
-      visible: true,
+      visible: utils.tryGet(extraOptions.seriesVisibles, i) || true,
       // TODO group分组
       stack: '',
       yAxis: index,
@@ -241,19 +287,19 @@ export function transform2LineData(data, extraOptions) {
     })
 
     yAxis.push({
-      title : {
+      title: {
         text : ''
       },
       opposite: opposite,
-      min : 0,
-      gridLineColor : '#E0E0E0',
+      min: 0,
+      gridLineColor: '#E0E0E0',
       gridLineDashStyle : 'Dash',
       allowDecimals: !!utils.tryGet(extraOptions.allowDecimals, i), //是否允许刻度有小数
-      labels : {
-        style : {
+      labels: {
+        style: {
           fontFamily : 'Arial, "微软雅黑", "宋体"'
         },
-        formatter : defaultYaxisLabelFormatter
+        formatter: yAxisLabelsFormatter
       }
     })
   })
@@ -263,12 +309,16 @@ export function transform2LineData(data, extraOptions) {
     series[1].yAxis = 1
   }
 
-  return {categories, markerEnabled, stacking, tickInterval, cursor, legendEnabled, tooltipFomatter, yAxis, series}
+  return {
+    categories, markerEnabled, stacking,
+    tickInterval, cursor, legendEnabled,
+    tooltipFomatter, yAxis, series
+  }
 }
 
 // 生成饼图基本配置
 export function getPieOptions(data, options = {}) {
-  return _.assign({
+  return _.merge({
     series: [
       {
         innerSize: '50%',
