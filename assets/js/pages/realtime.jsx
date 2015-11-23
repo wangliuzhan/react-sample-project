@@ -71,8 +71,20 @@ export default React.createClass({
           yAxisRightIndexes: [1],
           seriesTypes: ['column', 'spline'],
           seriesNames: ['付费次数', '付费占比'],
-          // suffix: formatPercentage,
-          yAxisSymbols: ['', '%']
+          yAxisSymbols: ['', '%'],
+          yAxisOppositeList: ['y0'],
+          tooltipOrderList: ['y1', 'a', 'y0'],
+          tooltipExtraData: {
+            'a': ['额外数据', 9527]
+          },
+          yAxisFormatter: function(value, name) {
+            if (name === 'y1') return parseFloat((value * 100).toFixed(2))
+
+            return value
+          },
+          yAxisLabelsFormatter: function(name, index) {
+            return this.value + (name === 'y0' ? '!' : '#')
+          }
         },
         table: [
           {title: '区间', dataIndex: 'x', key: '1', width: 100},
