@@ -68,14 +68,16 @@ export default React.createClass({
           }
         },
         chart: {
-          yAxisRightIndexes: [1],
-          seriesTypes: ['column', 'spline'],
-          seriesNames: ['付费次数', '付费占比'],
-          yAxisSymbols: ['', '%'],
+          seriesTypeList: ['column', 'spline'],
+          seriesNameList: ['付费次数', '付费占比'],
           yAxisOppositeList: ['y0'],
           tooltipOrderList: ['y1', 'a', 'y0'],
           tooltipExtraData: {
             'a': ['额外数据', 9527]
+          },
+          seriesStack: {
+            'male': [],
+            'femail': []
           },
           tooltipValueFormatter: function(value, name) {
             if (name === 'y1') return (value * 100).toFixed(2) + '%'

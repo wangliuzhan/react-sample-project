@@ -18,6 +18,24 @@ Highcharts.setOptions({
   }
 })
 
+// 获取分组配置信息，未设置的在默认分组
+// {male: ['y0', 'y1'], femail: ['y3']}
+function stackParser(config, names) {
+  let ret = {}
+  let defaultGroupName = 'default'
+  _.each(names, (val, key) => {
+    ret[key] = defaultGroupName
+  })
+
+  _.each(config, (val, key) => {
+    _.each(val, (name) => {
+      ret[name] = key
+    })
+  })
+
+  return ret
+}
+
 export const DEFAULT_LINE_OPTIONS = {
   chart : {
     backgroundColor : 'rgba(0, 0, 0, 0)'
@@ -238,10 +256,10 @@ export function transform2PieData(data) {
  * yAxisFormatter {Function} 【独占】y轴value格式化函数，接收2个额外的参数（y轴value、曲线名称y0,y1等）
  * yAxisLabelsFormatter {Function} 【独占（左右两侧）】纵坐标格式化，接收2个额外的参数（曲线名称、曲线索引）
  * yAxisOppositeList {Array} 指定那些曲线位于右侧 ['y0', 'y1']
- * seriesNames {Array<String>} 曲线名称
- * seriesTypes {Array<String>} 曲线类型
- * seriesColors {Array<String>} 曲线颜色
- * seriesVisibles {Array<Boolean>} 设置指定曲线的显示与隐藏
+ * seriesNameList {Array<String>} 曲线名称
+ * seriesTypeList {Array<String>} 曲线类型
+ * seriesColorList {Array<String>} 曲线颜色
+ * seriesVisibleList {Array<Boolean>} 设置指定曲线的显示与隐藏
  * allowDecimals {Boolean} 是否允许y轴刻度出现小树
  * tooltipOrderList {Array<String>} tooltip排序字段允许加入自定义的数据
  * tooltipExtraData {Object} tooltip自定义数据{key: [name, value]}
@@ -271,6 +289,7 @@ export function transform2LineData(data, extraOptions) {
   let tooltipFomatter = function() {
     return defaultTooltipFormatter.call(this, data, this.x.data, extraOptions)
   }
+  let seriesStack = stackParser(extraOptions.seriesStack)
   let yAxisKeys = _.keys(data.name).sort().filter((i) => {
     return i[0] === 'y'
   })
@@ -291,7 +310,9 @@ export function transform2LineData(data, extraOptions) {
   let series = []
   let yAxis = []
   _.each(yAxisList, (item, i) => {
+    // 使用哪个y轴（仅双或多y轴时有效）
     let index = 1
+    // 是否在右侧的y轴
     let opposite = false
     if (_.isArray(extraOptions.yAxisOppositeList)) {
       opposite = extraOptions.yAxisOppositeList.indexOf(yAxisKeys[i]) > -1
@@ -306,11 +327,10 @@ export function transform2LineData(data, extraOptions) {
       data: item,
       // 如果重新定义了则优先取配置，不然自动获取name属性配置
       name: utils.tryGet(extraOptions.seriesNames, i) || data.name['y' + i],
-      type: utils.tryGet(extraOptions.seriesTypes, i) || 'line',
-      color: utils.tryGet(extraOptions.seriesColors, i),
-      visible: utils.tryGet(extraOptions.seriesVisibles, i) || true,
-      // TODO group分组
-      stack: '',
+      type: utils.tryGet(extraOptions.seriesTypeList, i) || 'line',
+      color: utils.tryGet(extraOptions.seriesColorList, i),
+      visible: utils.tryGet(extraOptions.seriesVisibleList, i) || true,
+      stack: seriesStack['y' + i],
       yAxis: index,
       events: {
         click: extraOptions.onClick
