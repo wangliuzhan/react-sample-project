@@ -16,9 +16,12 @@ var deps = Object.keys(pkg.dependencies)
 
 process.env.NODE_ENV = 'development'
 
-var onError = (err) => {
-  throw err
+var onError = function(err) {
+  console.log('任务结束，执行出错：')
+  console.log(err)
+  this.emit('end')
 }
+
 var renameFunc = (x) => {
   x.basename += '.min'
 }
