@@ -21,6 +21,7 @@ Highcharts.setOptions({
 // 获取分组配置信息，未设置的在默认分组
 // {male: ['y0', 'y1'], femail: ['y3']}
 function stackParser(config, names) {
+  if (!config) return null
   let ret = {}
   let defaultGroupName = 'default'
   _.each(names, (val, key) => {
@@ -250,7 +251,6 @@ export function transform2PieData(data) {
  *
  * 配置说明：
  * categoryFormatter {Function} x轴格式化函数
- * stacking {Boolean} 是否堆叠
  * onClick {Function} 图表点击事件
  * legendEnabled {Boolean} 是否展示图例，默认为true
  * yAxisFormatter {Function} 【独占】y轴value格式化函数，接收2个额外的参数（y轴value、曲线名称y0,y1等）
@@ -260,6 +260,7 @@ export function transform2PieData(data) {
  * seriesTypeList {Array<String>} 曲线类型
  * seriesColorList {Array<String>} 曲线颜色
  * seriesVisibleList {Array<Boolean>} 设置指定曲线的显示与隐藏
+ * seriesStack {Object} 分组配置，未指定的在默认分组
  * allowDecimals {Boolean} 是否允许y轴刻度出现小树
  * tooltipOrderList {Array<String>} tooltip排序字段允许加入自定义的数据
  * tooltipExtraData {Object} tooltip自定义数据{key: [name, value]}
@@ -278,8 +279,6 @@ export function transform2LineData(data, extraOptions) {
   })
   // x轴为时间序列，只有一条数据是否展示点
   let markerEnabled = categories.length === 1
-  // 是否堆叠
-  let stacking = extraOptions.stacking
   // x轴步长
   let tickInterval = Math.ceil(categories.length / 12)
   // 有点击事件鼠标样式为cursor
@@ -290,6 +289,8 @@ export function transform2LineData(data, extraOptions) {
     return defaultTooltipFormatter.call(this, data, this.x.data, extraOptions)
   }
   let seriesStack = stackParser(extraOptions.seriesStack)
+  // 是否堆叠
+  let stacking = !!seriesStack
   let yAxisKeys = _.keys(data.name).sort().filter((i) => {
     return i[0] === 'y'
   })
@@ -330,7 +331,7 @@ export function transform2LineData(data, extraOptions) {
       type: utils.tryGet(extraOptions.seriesTypeList, i) || 'line',
       color: utils.tryGet(extraOptions.seriesColorList, i),
       visible: utils.tryGet(extraOptions.seriesVisibleList, i) || true,
-      stack: seriesStack['y' + i],
+      stack: seriesStack && seriesStack['y' + i],
       yAxis: index,
       events: {
         click: extraOptions.onClick
