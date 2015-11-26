@@ -28,3 +28,7 @@ export function getRandomColor() {
   }
   return color
 }
+
+export function getExposedModule(mod) {
+  return mod && mod.default ? mod.default : mod
+}

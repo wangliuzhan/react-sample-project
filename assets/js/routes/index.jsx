@@ -10,6 +10,7 @@ import RealTime from '../pages/realtime.jsx'
 import Event from '../pages/event.jsx'
 import _ from 'lodash'
 import {ACTION_CREATOR_MAP} from '../config.jsx'
+import * as utils from '../utils/utils.jsx'
 
 /**
  * 状态数据都存储在states属性
@@ -27,15 +28,13 @@ function mapStateToProps(state = {}) {
 function mapDispatchToProps(dispatch) {
   let actions = {}
   Object.keys(ACTION_CREATOR_MAP).forEach((moduleName) => {
-    let creator = ACTION_CREATOR_MAP[moduleName]
+    let creator = utils.getExposedModule(ACTION_CREATOR_MAP[moduleName])
     Object.keys(creator).forEach((action) => {
-      let handler = creator[action]
-      // TODO export default 还有问题
-      handler = handler.default || handler
+      let handler = utils.getExposedModule(creator[action])
+      debugger
       // default, __esModule
       if (!_.isFunction(handler)) return
 
-      debugger
       let realActionName = _.camelCase(['on', moduleName, action].join('_'))
       // 传递数据只用一个参数，参见action/*.jsx
       actions[realActionName] = (data) => {
