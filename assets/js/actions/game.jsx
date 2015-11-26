@@ -1,15 +1,15 @@
 function create(gameItem) {
   return {
-    type: 'create',
+    type: 'game_create',
     data: gameItem
   }
 }
 
 function del(id) {
   return {
-    type: 'del',
+    type: 'game_del',
     data: id
   }
 }
 
-export default {create, del}
+export {create, del}

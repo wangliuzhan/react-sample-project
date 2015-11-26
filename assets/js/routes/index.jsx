@@ -8,7 +8,44 @@ import {connect} from 'react-redux'
 import Home from '../pages/home.jsx'
 import RealTime from '../pages/realtime.jsx'
 import Event from '../pages/event.jsx'
-import {mapStateToProps, mapDispatchToProps} from '../helpers/map2Props.jsx'
+import _ from 'lodash'
+import {ACTION_CREATOR_MAP} from '../config.jsx'
+
+/**
+ * 状态数据都存储在states属性
+ */
+function mapStateToProps(state = {}) {
+  return {
+    states: Object.assign({}, state)
+  }
+}
+
+/**
+ * 最终传递给组件props的actions形式如下：
+ * onGameCreate => 对应actions/game.jsx (create)
+ */
+function mapDispatchToProps(dispatch) {
+  let actions = {}
+  Object.keys(ACTION_CREATOR_MAP).forEach((moduleName) => {
+    let creator = ACTION_CREATOR_MAP[moduleName]
+    Object.keys(creator).forEach((action) => {
+      let handler = creator[action]
+      // TODO export default 还有问题
+      handler = handler.default || handler
+      // default, __esModule
+      if (!_.isFunction(handler)) return
+
+      debugger
+      let realActionName = _.camelCase(['on', moduleName, action].join('_'))
+      // 传递数据只用一个参数，参见action/*.jsx
+      actions[realActionName] = (data) => {
+        dispatch(handler(data))
+      }
+    })
+  })
+
+  return {actions}
+}
 
 let Entry = connect(
   mapStateToProps,
