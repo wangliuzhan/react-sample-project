@@ -1,3 +1,4 @@
+// TODO 这里怎么包装一下
 function create(gameItem) {
   return {
     type: 'game_create',
