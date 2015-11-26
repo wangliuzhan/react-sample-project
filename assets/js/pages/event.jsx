@@ -5,11 +5,15 @@ export default React.createClass({
     actions: PropTypes.object
   },
 
-  handleClick() {
+  createGame() {
     this.props.actions.onGameCreate({
-      gameItem: {
-        name: '测试游戏'
-      }
+      name: '测试游戏'
+    })
+  },
+
+  removeGame() {
+    this.props.actions.onGameDel({
+      id: 1
     })
   },
 
@@ -17,7 +21,9 @@ export default React.createClass({
     return (
       <div className="txt-red">
         event
-        <button onClick={this.handleClick}>Add Game</button>
+        <button onClick={this.createGame}>Add Game</button>
+        <br />
+        <button onClick={this.removeGame}>Delete</button>
       </div>
     )
   }

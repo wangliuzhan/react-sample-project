@@ -1,14 +1,14 @@
 function create(gameItem) {
   return {
     type: 'create',
-    gameItem
+    data: gameItem
   }
 }
 
 function del(id) {
   return {
     type: 'del',
-    id
+    data: id
   }
 }
 
