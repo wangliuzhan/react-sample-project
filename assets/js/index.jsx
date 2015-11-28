@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 import routes from './routes/index.jsx'
-import * as ReduxUtils from './helpers/redux.jsx'
+import createStore from './store/index.jsx'
 
-const store = createStore(ReduxUtils.combinedReducer)
+const store = createStore()
+
 let App = React.createClass({
   render() {
     return (
