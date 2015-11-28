@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import Tabs from '../components/tabs.jsx'
 import Loading from '../components/loading.jsx'
-import ajax from 'reqwest'
+import ajax from '../utils/ajax.jsx'
 import Table from 'rc-table'
 import Pagination from 'rc-pagination'
 import * as utils from '../utils/utils.jsx'
@@ -167,23 +167,25 @@ export default React.createClass({
 
     ajax({
       url: item.url,
-      data: params
-    }).then((response) => {
-      this.setState({
-        json: this.props.transform ? this.props.transform(response) : response,
-        glance: response.glance,
-        labels: response.name,
-        // 客户端分页读取当前页码id
-        pageNum: params.pageID || this.state.pageNum,
-        selectedTabIndex: i,
-        selectedSubTabIndex: 0,
-        isLoading: false
-      })
-    }).fail(() => {
-      // TODO 错误处理
-      this.setState({
-        isLoading: false
-      })
+      data: params,
+      success: (response) => {
+        this.setState({
+          json: this.props.transform ? this.props.transform(response) : response,
+          glance: response.glance,
+          labels: response.name,
+          // 客户端分页读取当前页码id
+          pageNum: params.pageID || this.state.pageNum,
+          selectedTabIndex: i,
+          selectedSubTabIndex: 0,
+          isLoading: false
+        })
+      },
+      fail: (response) => {
+        // TODO 错误处理
+        this.setState({
+          isLoading: false
+        })
+      }
     })
   },
 
