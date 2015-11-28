@@ -14,6 +14,10 @@ export default function ajax(opts) {
     }
   }
 
+  if (opts.timeout) {
+    req = req.timeout(opts.timeout)
+  }
+
   if (opts.withCredentials) {
     req = req.withCredentials()
   }
