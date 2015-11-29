@@ -23,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^3.3.5",
+    "es6-promise": "^3.0.2",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
     "rc-pagination": "^1.2.1",
