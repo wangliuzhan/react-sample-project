@@ -6,7 +6,7 @@
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import Home from './home.jsx'
-import * as allActions from '../actions/game.jsx'
+import actionMap from '../actions/index.jsx'
 
 export function mapStateToProps(state = {}) {
   return {
@@ -15,7 +15,7 @@ export function mapStateToProps(state = {}) {
 }
 
 export function mapDispatchToProps(dispatch) {
-  let actions = bindActionCreators(allActions, dispatch)
+  let actions = bindActionCreators(actionMap, dispatch)
   return {actions}
 }
 

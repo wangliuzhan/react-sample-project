@@ -6,13 +6,13 @@ export default React.createClass({
   },
 
   createGame() {
-    this.props.actions.create({
+    this.props.actions.gameCreate({
       name: '测试游戏'
     })
   },
 
   removeGame() {
-    this.props.actions.del({
+    this.props.actions.gameDel({
       id: 1
     })
   },
