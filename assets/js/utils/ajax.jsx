@@ -1,25 +1,21 @@
-import request from 'superagent'
+import request from 'superagent/lib/client'
 
 export default function ajax(opts) {
   let method = opts.method ? opts.method.toLowerCase() : 'get'
-  let req = request[method](opts.url)
+  let req = request[method](opts.url, opts.data || opts.body)
 
-  if (opts.data || opts.body) {
-    req = req.send(opts.data || opts.body)
+  let headers = opts.headers || {
+    'Content-Type': 'application/json; charset=UTF-8'
   }
 
-  if (opts.headers) {
-    for(let key in opts.headers) {
-      req = req.set(key, opts.headers[key])
-    }
+  for(let key in headers) {
+    req.set(key, headers[key])
   }
 
-  if (opts.timeout) {
-    req = req.timeout(opts.timeout)
-  }
+  req.timeout(opts.timeout || 10000)
 
   if (opts.withCredentials) {
-    req = req.withCredentials()
+    req.withCredentials()
   }
 
   if (opts.success || opts.fail) {
