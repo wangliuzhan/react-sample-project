@@ -35,6 +35,7 @@
     "id-length": 0
   },
   "globals": {
-    "Highcharts": true
+    "Highcharts": true,
+    "App": true
   }
 }
