@@ -7,10 +7,10 @@ React新手入门示例项目
 > * React
 > * React Router
 > * React Highcharts
+> * Redux
 > * Browserify
 > * Gulp
 > * Babel
-> * npm
 
 ## 编辑器 Editor
 
@@ -37,7 +37,7 @@ npm run watch
 ## 发布 Build
 
 ```bash
-npm run build (gulp)
+gulp
 ```
 
 build改动:
@@ -52,6 +52,10 @@ build改动:
 ```bash
 puer .
 ```
+
+## Mock
+
+查看`assets/js/mocks/index.js`，使用`superagent-mocker`
 
 ## 其它
 
