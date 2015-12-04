@@ -11,6 +11,7 @@ React新手入门示例项目
 > * Browserify
 > * Gulp
 > * Babel
+> * jest
 
 ## 编辑器 Editor
 
@@ -33,6 +34,14 @@ npm run watch
 ```
 
 入口页面 pages/index-dev.html
+
+## 单元测试 Unit test
+
+```bash
+npm test
+```
+
+使用`jest`
 
 ## 发布 Build
 
