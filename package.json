@@ -16,7 +16,8 @@
   "scripts": {
     "build-app": "gulp build-app",
     "build-common": "gulp build-common",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "test": "jest"
   },
   "author": "simonxu",
   "license": "MIT",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^4.1.5",
+    "babel-jest": "^6.0.1",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.1.18",
     "babelify": "^7.2.0",
@@ -53,6 +55,20 @@
     "gulp-minify-css": "^1.2.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1",
+    "jest-cli": "^0.8.0",
+    "react-addons-test-utils": "^0.14.3",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/react-dom",
+      "<rootDir>/node_modules/react-addons-test-utils",
+      "<rootDir>/node_modules/fbjs"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ]
   }
 }
