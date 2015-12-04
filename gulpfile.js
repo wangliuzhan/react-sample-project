@@ -39,6 +39,7 @@ function getHash(filepath) {
 gulp.task('build-app', () => {
   return browserify('assets/js/index.jsx')
   .transform(babelify, {presets: ["es2015", "react"]})
+  // TODO 生产环境排除mock
   .external(deps)
   .bundle()
   .on('error', onError)
@@ -48,7 +49,11 @@ gulp.task('build-app', () => {
 
 gulp.task('build-common', () => {
   var b = browserify()
+  // superagent 只用client
+  var exludedLibs = ['superagent']
   deps.forEach((x) => {
+    if (exludedLibs.indexOf(x) > -1) return
+
     b.require(require.resolve(x), {
       expose: x
     })

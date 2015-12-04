@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react'
 
 export default React.createClass({
   propTypes: {
-    actions: PropTypes.object
+    actions: PropTypes.object,
+    states: PropTypes.object
   },
 
   createGame() {
@@ -21,7 +22,9 @@ export default React.createClass({
     return (
       <div className="txt-red">
         event
-        <button onClick={this.createGame}>Add Game</button>
+        <button onClick={this.createGame}>
+          {this.props.states.game.loading ? 'Loading' : 'Add Game'}
+        </button>
         <br />
         <button onClick={this.removeGame}>Delete</button>
       </div>

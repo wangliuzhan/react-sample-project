@@ -1,4 +1,5 @@
 import request from 'superagent/lib/client'
+import '../mocks/index.js'
 
 export default function ajax(opts) {
   let method = opts.method ? opts.method.toLowerCase() : 'get'
@@ -20,9 +21,9 @@ export default function ajax(opts) {
 
   if (opts.success || opts.fail) {
     req.end((err, res) => {
-      if (res.ok && opts.success) {
+      if (!err && opts.success) {
         opts.success(res.body, res)
-      } else if (!res.ok && opts.fail) {
+      } else if (err && opts.fail) {
         opts.fail(res.text, err)
       }
     })
@@ -32,11 +33,11 @@ export default function ajax(opts) {
 
   return new Promise(function(resolve, reject) {
     req.end((err, res) => {
-      if (res.ok) {
+      if (!err) {
         res.req = req
         resolve(res)
       } else {
-        reject(err || new Error(res.text))
+        reject(err)
       }
     })
   })
