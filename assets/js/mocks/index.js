@@ -8,7 +8,10 @@ import request from 'superagent/lib/client'
 import mocker from 'superagent-mocker'
 
 // mocker.timeout = 100
-const mock = mocker(request)
+const mock = App.useMock ? mocker(request) : {
+  post: function() {},
+  get: function() {}
+}
 
 // SAMPLE
 // mock.get('/topics/:id', function(req) {

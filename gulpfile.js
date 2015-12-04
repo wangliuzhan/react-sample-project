@@ -1,4 +1,7 @@
 /*eslint-disable */
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+
 var gulp = require('gulp')
 var browserify = require('browserify')
 var source = require('vinyl-source-stream')
@@ -13,8 +16,8 @@ var hasher = require('gulp-hasher')
 var path = require('path')
 var pkg = require('./package.json')
 var deps = Object.keys(pkg.dependencies)
-
-process.env.NODE_ENV = 'development'
+// superagent 只用client
+var EXCLUED_LIBS = ['superagent']
 
 var onError = function(err) {
   console.log('任务结束，执行出错：')
@@ -39,7 +42,6 @@ function getHash(filepath) {
 gulp.task('build-app', () => {
   return browserify('assets/js/index.jsx')
   .transform(babelify, {presets: ["es2015", "react"]})
-  // TODO 生产环境排除mock
   .external(deps)
   .bundle()
   .on('error', onError)
@@ -49,10 +51,8 @@ gulp.task('build-app', () => {
 
 gulp.task('build-common', () => {
   var b = browserify()
-  // superagent 只用client
-  var exludedLibs = ['superagent']
   deps.forEach((x) => {
-    if (exludedLibs.indexOf(x) > -1) return
+    if (EXCLUED_LIBS.indexOf(x) > -1) return
 
     b.require(require.resolve(x), {
       expose: x
