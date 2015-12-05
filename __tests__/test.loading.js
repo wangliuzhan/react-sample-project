@@ -24,7 +24,7 @@ describe('Loading Component', function() {
     expect(loading.props.children[1]).toBeUndefined()
   })
 
-  it('should contain empty text "Loading" and children when props.done is true', function() {
+  it('should contain empty text and children when props.done is true', function() {
     let render = TestUtils.createRenderer()
     let child = <strong>child</strong>
     render.render(<Loading done>{child}</Loading>)

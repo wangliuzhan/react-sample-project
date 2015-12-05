@@ -48,12 +48,12 @@ function getHash(filepath) {
  */
 gulp.task('build-app', () => {
   return browserify('assets/js/index.jsx')
-  .transform(babelify, BABEL_RC)
-  .external(deps)
-  .bundle()
-  .on('error', onError)
-  .pipe(source('app.js'))
-  .pipe(gulp.dest('assets-build/js'))
+    .transform(babelify, BABEL_RC)
+    .external(deps)
+    .bundle()
+    .on('error', onError)
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('assets-build/js'))
 })
 
 // 打包公共脚本
@@ -68,14 +68,14 @@ gulp.task('build-common', () => {
   })
 
   return b.bundle()
-  .on('error', onError)
-  .pipe(source('common.js'))
-  .pipe(gulp.dest('assets-build/js'))
+    .on('error', onError)
+    .pipe(source('common.js'))
+    .pipe(gulp.dest('assets-build/js'))
 })
 
 gulp.task('build-charts', () => {
   return gulp.src('assets/js/libs/*.js')
-  .pipe(gulp.dest('assets-build/js'))
+    .pipe(gulp.dest('assets-build/js'))
 })
 
 gulp.task('build-css', () => {
