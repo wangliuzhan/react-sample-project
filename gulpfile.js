@@ -1,4 +1,7 @@
 /*eslint-disable */
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+
 var gulp = require('gulp')
 var browserify = require('browserify')
 var source = require('vinyl-source-stream')
@@ -13,8 +16,8 @@ var hasher = require('gulp-hasher')
 var path = require('path')
 var pkg = require('./package.json')
 var deps = Object.keys(pkg.dependencies)
-
-process.env.NODE_ENV = 'development'
+// superagent 只用client
+var EXCLUED_LIBS = ['superagent']
 
 var onError = function(err) {
   console.log('任务结束，执行出错：')
@@ -49,6 +52,8 @@ gulp.task('build-app', () => {
 gulp.task('build-common', () => {
   var b = browserify()
   deps.forEach((x) => {
+    if (EXCLUED_LIBS.indexOf(x) > -1) return
+
     b.require(require.resolve(x), {
       expose: x
     })
