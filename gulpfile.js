@@ -1,47 +1,54 @@
-/*eslint-disable */
+/**
+ * 使用方法参见 package.json 的 scripts
+ *
+ */
 
+/*eslint-disable*/
+
+'use strict'
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
-var gulp = require('gulp')
-var browserify = require('browserify')
-var source = require('vinyl-source-stream')
-var babelify = require('babelify')
-var concatCss = require('gulp-concat-css')
-var minifyCss = require('gulp-minify-css')
-var rename = require('gulp-rename')
-var uglify = require('gulp-uglify')
-var del = require('del')
-var replace = require('gulp-html-replace')
-var hasher = require('gulp-hasher')
-var path = require('path')
-var pkg = require('./package.json')
-var deps = Object.keys(pkg.dependencies)
-// superagent 只用client
-var EXCLUED_LIBS = ['superagent']
-
-var onError = function(err) {
+let gulp = require('gulp')
+let browserify = require('browserify')
+let source = require('vinyl-source-stream')
+let babelify = require('babelify')
+let concatCss = require('gulp-concat-css')
+let minifyCss = require('gulp-minify-css')
+let rename = require('gulp-rename')
+let uglify = require('gulp-uglify')
+let del = require('del')
+let replace = require('gulp-html-replace')
+let hasher = require('gulp-hasher')
+let path = require('path')
+let pkg = require('./package.json')
+let fs = require('fs')
+let deps = Object.keys(pkg.dependencies)
+let BABEL_RC = JSON.parse(fs.readFileSync('./.babelrc'))
+// 有些公告库脚本不要打包，比如superagent只用到了客户端脚本
+let EXCLUED_LIBS = ['superagent']
+let onError = function(err) {
   console.log('任务结束，执行出错：')
   console.log(err)
   this.emit('end')
 }
-
-var renameFunc = (x) => {
+let renameFunc = (x) => {
   x.basename += '.min'
 }
 
 function getHash(filepath) {
-  var hashes = hasher.hashes
-  var realpath = path.resolve(__dirname, filepath)
+  let hashes = hasher.hashes
+  let realpath = path.resolve(__dirname, filepath)
   return '../' + filepath + '?v=' + hashes[realpath]
 }
 
 /**
+ * 打包业务脚本
  * 分块打包
  * https://github.com/sogko/gulp-recipes/blob/master/browserify-separating-app-and-vendor-bundles/gulpfile.js
  */
 gulp.task('build-app', () => {
   return browserify('assets/js/index.jsx')
-  .transform(babelify, {presets: ["es2015", "react"]})
+  .transform(babelify, BABEL_RC)
   .external(deps)
   .bundle()
   .on('error', onError)
@@ -49,8 +56,9 @@ gulp.task('build-app', () => {
   .pipe(gulp.dest('assets-build/js'))
 })
 
+// 打包公共脚本
 gulp.task('build-common', () => {
-  var b = browserify()
+  let b = browserify()
   deps.forEach((x) => {
     if (EXCLUED_LIBS.indexOf(x) > -1) return
 
@@ -66,14 +74,13 @@ gulp.task('build-common', () => {
 })
 
 gulp.task('build-charts', () => {
-  // TODO 合并
   return gulp.src('assets/js/libs/*.js')
   .pipe(gulp.dest('assets-build/js'))
 })
 
 gulp.task('build-css', () => {
   return gulp.src(['node_modules/bootstrap/dist/css/bootstrap.css', 'assets/css/*.css'])
-    .pipe(concatCss("index.css"))
+    .pipe(concatCss('index.css'))
     .pipe(gulp.dest('assets-build/css'))
 })
 
@@ -104,8 +111,12 @@ gulp.task('hasher', ['minify-js', 'minify-css'], () => {
     .pipe(hasher())
 })
 
+/**
+ * 发布资源
+ * 页面内容替换
+ */
 gulp.task('publish', ['hasher'], () => {
-  var opts = {
+  let opts = {
     css: [
       getHash('assets-build/css/index.min.css')
     ],
@@ -115,7 +126,7 @@ gulp.task('publish', ['hasher'], () => {
       getHash('assets-build/js/app.min.js')
     ]
   }
-  return gulp.src('pages/index-dev.html')
+  return gulp.src('pages/index-dev.*')
     .pipe(replace(opts))
     .pipe(rename((x) => x.basename = x.basename.replace('-dev', '')))
     .pipe(gulp.dest('pages'))
@@ -123,7 +134,7 @@ gulp.task('publish', ['hasher'], () => {
 
 // 监测jsx变化，实时编译js文件
 gulp.task('watch', ['build-app'], function() {
-  var watcher = gulp.watch('assets/js/**/*.jsx', ['build-app'])
+  let watcher = gulp.watch('assets/js/**/*.jsx', ['build-app'])
   watcher.on('change', function() {
     console.log('检测到jsx文件内容变化，更新中...')
   })
