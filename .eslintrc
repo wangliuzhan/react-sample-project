@@ -32,7 +32,9 @@
     "space-before-function-paren": 0,
     "spaced-comment": 0,
     "vars-on-top": 0,
-    "id-length": 0
+    "id-length": 0,
+    "no-magic-numbers": 2,
+    "object-curly-spacing": [2, "never"]
   },
   "globals": {
     "Highcharts": true,
