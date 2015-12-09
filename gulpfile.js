@@ -149,6 +149,11 @@ gulp.task('watch', ['build-app'], function() {
   watcher.on('change', function() {
     console.log('检测到jsx文件内容变化，更新中...')
   })
+
+  let watcher2 = gulp.watch('package.json', ['build-common'])
+  watcher2.on('change', function() {
+    console.log('检测到package.json基础库变化，更新中...')
+  })
 })
 
 gulp.task('lint', function() {
