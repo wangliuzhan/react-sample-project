@@ -4,12 +4,12 @@
 import React, {PropTypes} from 'react'
 import Header from '../widgets/header.jsx'
 import Footer from '../widgets/footer.jsx'
+import SideMenu from '../widgets/side_menu/root.jsx'
 
 export default React.createClass({
   propTypes: {
     children: PropTypes.any,
-    actions: PropTypes.object.isRequired,
-    states: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired
   },
 
   render() {
@@ -47,15 +47,17 @@ export default React.createClass({
 
     // 作为入口页面接收redux所有的actions，不然子组件无法找到
     const body = !this.props.children ? gameCenter : React.cloneElement(this.props.children, {
-      actions: this.props.actions,
-      states: this.props.states
+      actions: this.props.actions
     })
 
     return (
-      <div className="wrapper">
-        <Header />
-        {body}
-        <Footer />
+      <div className="wrapper" id="wrapper">
+        <SideMenu />
+        <div id="main">
+          <Header />
+          {body}
+          <Footer />
+        </div>
       </div>
     )
   }

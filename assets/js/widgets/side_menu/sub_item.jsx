@@ -2,26 +2,21 @@ import React, {PropTypes} from 'react'
 
 export default React.createClass({
   propTypes: {
-    items: PropTypes.array.isRequired
+    li: PropTypes.object.isRequired
   },
 
   getDefaultProps() {
     return {
-      items: []
+      li: {}
     }
-  },
-
-  getInitialState() {
-
   },
 
   render() {
     return (
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-      </ul>
+      <li>
+        <a href={this.props.li.href}>{this.props.li.name}</a>
+      </li>
     )
   }
 })
+
