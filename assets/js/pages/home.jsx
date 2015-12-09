@@ -9,7 +9,8 @@ import SideMenu from '../widgets/side_menu/root.jsx'
 export default React.createClass({
   propTypes: {
     children: PropTypes.any,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    states: PropTypes.object.isRequired
   },
 
   render() {
@@ -47,7 +48,8 @@ export default React.createClass({
 
     // 作为入口页面接收redux所有的actions，不然子组件无法找到
     const body = !this.props.children ? gameCenter : React.cloneElement(this.props.children, {
-      actions: this.props.actions
+      actions: this.props.actions,
+      states: this.props.states
     })
 
     return (
