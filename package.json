@@ -26,8 +26,6 @@
     "es6-promise": "^3.0.2",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
-    "rc-pagination": "^1.2.1",
-    "rc-table": "^3.6.1",
     "react": "^0.14.2",
     "react-bootstrap": "^0.28.1",
     "react-dom": "^0.14.2",

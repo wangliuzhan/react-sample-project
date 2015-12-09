@@ -22,7 +22,7 @@ export default React.createClass({
   render() {
     return (
       <li>
-        <span onClick={ ()=> this.setState({ open: !this.state.open })}>{this.props.item.name}</span>
+        <span onClick={ ()=> this.setState({open: !this.state.open})}>{this.props.item.name}</span>
         <Collapse in={this.state.open}>
           <ul className="menu_ul">
             {this.props.item.subs.map((sub) => {
