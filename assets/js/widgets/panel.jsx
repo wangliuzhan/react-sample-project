@@ -6,7 +6,7 @@ import Table from 'rc-table'
 import Pagination from 'rc-pagination'
 import * as utils from '../utils/utils.jsx'
 import Chart from './chart.jsx'
-import _ from 'loadsh'
+import _ from 'lodash'
 
 export default React.createClass({
   propTypes: {
