@@ -1,6 +1,8 @@
 import request from 'superagent/lib/client'
 import '../mocks/index.js'
 
+const DEFAULT_TIMEOUT = 10000
+
 export default function ajax(opts) {
   let method = opts.method ? opts.method.toLowerCase() : 'get'
   let req = request[method](opts.url, opts.data || opts.body)
@@ -13,7 +15,7 @@ export default function ajax(opts) {
     req.set(key, headers[key])
   }
 
-  req.timeout(opts.timeout || 10000)
+  req.timeout(opts.timeout || DEFAULT_TIMEOUT)
 
   if (opts.withCredentials) {
     req.withCredentials()

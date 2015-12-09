@@ -23,8 +23,10 @@ export function asBool(x, undefIsTrue = true) {
 export function getRandomColor() {
   let letters = '0123456789ABCDEF'.split('')
   let color = '#'
-  for (let i = 0; i < 6; i++ ) {
-    color += letters[Math.floor(Math.random() * 16)]
+  const HEX_LEN = 6
+  const HEX_MAX = 16
+  for (let i = 0; i < HEX_LEN; i++ ) {
+    color += letters[Math.floor(Math.random() * HEX_MAX)]
   }
   return color
 }

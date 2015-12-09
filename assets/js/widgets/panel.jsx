@@ -6,6 +6,7 @@ import Table from 'rc-table'
 import Pagination from 'rc-pagination'
 import * as utils from '../utils/utils.jsx'
 import Chart from './chart.jsx'
+import _ from 'loadsh'
 
 export default React.createClass({
   propTypes: {
@@ -149,7 +150,7 @@ export default React.createClass({
     let tab = this.getCurrentTab()
     if (!tab.chart) return ''
 
-    return <Chart data={this.state.json} type={tab.chartType} options={tab.chart} />
+    return <Chart data={this.state.json} options={tab.chart} />
   },
 
   // tab切换事件（客户端分页只在tab切换时调用，服务端分页会在页码切换时也调用）
@@ -196,7 +197,7 @@ export default React.createClass({
 
   // 切换表格图表
   switchMode(e) {
-    if (e.target.className.indexOf('active') > -1) return
+    if (_.contains(e.target.className, 'active')) return
 
     this.setState({
       mode: this.state.mode === 'table' ? 'chart' : 'table'

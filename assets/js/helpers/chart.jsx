@@ -280,7 +280,8 @@ export function transform2LineData(data, extraOptions) {
   // x轴为时间序列，只有一条数据是否展示点
   let markerEnabled = categories.length === 1
   // x轴步长
-  let tickInterval = Math.ceil(categories.length / 12)
+  const STEP_LEN = 12
+  let tickInterval = Math.ceil(categories.length / STEP_LEN)
   // 有点击事件鼠标样式为cursor
   let cursor = !!extraOptions.onClick
   // 是否展示图例，大部分情况默认为true
@@ -316,7 +317,7 @@ export function transform2LineData(data, extraOptions) {
     // 是否在右侧的y轴
     let opposite = false
     if (_.isArray(extraOptions.yAxisOppositeList)) {
-      opposite = extraOptions.yAxisOppositeList.indexOf(yAxisKeys[i]) > -1
+      opposite = _.contains(extraOptions.yAxisOppositeList, yAxisKeys[i])
       index = i
     }
     // y轴格式化，额外传递当前曲线的全部数据，以及曲线的对应的name，index
