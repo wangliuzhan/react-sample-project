@@ -25,7 +25,7 @@ export function getRandomColor() {
   let color = '#'
   const HEX_LEN = 6
   const HEX_MAX = 16
-  for (let i = 0; i < HEX_LEN; i++ ) {
+  for (let i = 0; i < HEX_LEN; i++) {
     color += letters[Math.floor(Math.random() * HEX_MAX)]
   }
   return color

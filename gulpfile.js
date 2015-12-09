@@ -41,6 +41,17 @@ function getHash(filepath) {
   return '../' + filepath + '?v=' + hashes[realpath]
 }
 
+function getLintReport() {
+  var CLIEngine = require("eslint").CLIEngine
+  var cli = new CLIEngine({
+    useEslintrc: true,
+    ignore: true,
+    extensions: ['jsx', 'js']
+  })
+  var report = cli.executeOnFiles(["./assets/js/"])
+  return report
+}
+
 /**
  * 打包业务脚本
  * 分块打包
@@ -140,4 +151,18 @@ gulp.task('watch', ['build-app'], function() {
   })
 })
 
-gulp.task('default', ['publish'])
+gulp.task('lint', function() {
+  var report = getLintReport().results.filter((item) => {
+    return item.errorCount > 0 || item.warningCount > 0
+  })
+  console.log(report)
+})
+
+gulp.task('default', function() {
+  var report = getLintReport()
+  if (report.errorCount > 0) {
+    throw new Error('源码不规范，请检查。运行gulp lint查看详细结果')
+  }
+
+  gulp.start('publish')
+})

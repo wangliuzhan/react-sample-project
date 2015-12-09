@@ -11,7 +11,7 @@ export default function ajax(opts) {
     'Content-Type': 'application/json; charset=UTF-8'
   }
 
-  for(let key in headers) {
+  for (let key in headers) {
     req.set(key, headers[key])
   }
 
