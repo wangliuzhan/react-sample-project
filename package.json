@@ -29,6 +29,7 @@
     "rc-pagination": "^1.2.1",
     "rc-table": "^3.6.1",
     "react": "^0.14.2",
+    "react-bootstrap": "^0.28.1",
     "react-dom": "^0.14.2",
     "react-highcharts": "^5.0.4",
     "react-redux": "^4.0.0",

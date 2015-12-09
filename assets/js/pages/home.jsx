@@ -4,6 +4,7 @@
 import React, {PropTypes} from 'react'
 import Header from '../widgets/header.jsx'
 import Footer from '../widgets/footer.jsx'
+import SideMenu from '../widgets/side_menu/root.jsx'
 
 export default React.createClass({
   propTypes: {
@@ -52,10 +53,13 @@ export default React.createClass({
     })
 
     return (
-      <div className="wrapper">
-        <Header />
-        {body}
-        <Footer />
+      <div className="wrapper" id="wrapper">
+        <SideMenu />
+        <div id="main">
+          <Header />
+          {body}
+          <Footer />
+        </div>
       </div>
     )
   }
