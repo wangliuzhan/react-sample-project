@@ -19,4 +19,3 @@ export default React.createClass({
     )
   }
 })
-

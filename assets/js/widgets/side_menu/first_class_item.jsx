@@ -1,7 +1,12 @@
 import React from 'react'
 import {Collapse} from 'react-bootstrap'
+import Sub from './sub_item.jsx'
 
 export default React.createClass({
+  propTypes: {
+    item: React.PropTypes.object.isRequired
+  },
+
   getDefaultProps() {
     return {
       item: {}
@@ -21,27 +26,11 @@ export default React.createClass({
         <Collapse in={this.state.open}>
           <ul className="menu_ul">
             {this.props.item.subs.map((sub) => {
-              return <Item key={sub.name} li={sub}/>
+              return <Sub key={sub.name} li={sub}/>
             })}
           </ul>
         </Collapse>
       </li>
     )
-  }
-})
-
-let Item = React.createClass({
-  getDefaultProps() {
-    return {
-      li: {}
-    }
-  },
-
-  render() {
-    return (
-      <li>
-        <a href={this.props.li.href}>{this.props.li.name}</a>
-      </li>
-      )
   }
 })
