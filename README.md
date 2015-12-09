@@ -1,5 +1,7 @@
 # react-sample-project
 
+[![Build Status](https://semaphoreci.com/api/v1/projects/309edeb5-1aba-4b9c-ad8b-f12f196d4c43/628496/badge.svg)](https://semaphoreci.com/damngoto/react-sample-project)
+
 React新手入门示例项目
 
 ## 工具集 tools

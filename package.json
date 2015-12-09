@@ -14,17 +14,17 @@
     "react-starter"
   ],
   "scripts": {
-    "publish": "NODE_ENV=production gulp",
-    "build-app": "gulp build-app",
-    "build-common": "gulp build-common",
-    "watch": "gulp watch",
+    "publish": "node node_modules/gulp/bin/gulp.js",
+    "build-app": "node node_modules/gulp/bin/gulp.js build-app",
+    "build-common": "node node_modules/gulp/bin/gulp.js build-common",
+    "watch": "node node_modules/gulp/bin/gulp.js watch",
     "test": "jest"
   },
   "author": "simonxu",
   "license": "MIT",
   "dependencies": {
     "es6-promise": "^3.0.2",
-    "history": "^1.13.1",
+    "history": "1.13.1",
     "lodash": "^3.10.1",
     "rc-pagination": "^1.2.1",
     "rc-table": "^3.6.1",
@@ -33,7 +33,7 @@
     "react-dom": "^0.14.2",
     "react-highcharts": "^5.0.4",
     "react-redux": "^4.0.0",
-    "react-router": "^1.0.0",
+    "react-router": "1.0.0",
     "redux": "^3.0.4",
     "redux-logger": "^2.0.4",
     "superagent": "^1.4.0",
