@@ -1,0 +1,40 @@
+body{
+    background:#e0e4f1;
+}
+#header{
+    position:relative;
+    padding:10px 15px;
+    overflow:hidden;
+    background: #4261A8;
+    background-image: -ms-linear-gradient(top, #323b8d, #3b4498);
+    background-image: -moz-linear-gradient(top, #323b8d, #3b4498);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #323b8d), color-stop(1, #3b4498));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#323b8d', endColorstr='#3b4498', GradientType=0);
+}
+.logo a {
+    float: left;
+    width: 240px;
+    height: 32px;
+    overflow: hidden;
+    background: url(../img/logo.png) no-repeat left center;
+}
+#footer{
+    margin-top:-1px;
+    padding:15px 0;
+    text-align:center;
+    font-size: 12px;
+    color: #6d7483;
+}
+.top-tool {
+    float: right;
+    line-height: 32px;
+    padding: 0 10px;
+}
+.top-tool a {
+    float:left;
+    padding: 0 10px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 14px;
+}
+

@@ -95,6 +95,15 @@ gulp.task('build-css', () => {
     .pipe(gulp.dest('assets-build/css'))
 })
 
+gulp.task('build-img', () => {
+  return gulp.src('assets/img/*')
+    .pipe(gulp.dest('assets-build/img'))
+})
+
+gulp.task('build-fonts', () => {
+  return gulp.src('assets/fonts/*')
+    .pipe(gulp.dest('assets-build/fonts'))
+})
 gulp.task('clean-css', (cb)=> {
   del(['assets-build/css/*.min.css']).then(() => cb())
 })
@@ -105,7 +114,7 @@ gulp.task('clean-js', (cb)=> {
 
 gulp.task('minify-css', ['build-css', 'clean-css'], () => {
   return gulp.src('assets-build/**/*.css')
-    .pipe(minifyCss({compatibility: 'ie8'}))
+    .pipe(minifyCss({compatibility: 'ie8', rebase: false}))
     .pipe(rename(renameFunc))
     .pipe(gulp.dest('assets-build'))
 })
@@ -126,7 +135,7 @@ gulp.task('hasher', ['minify-js', 'minify-css'], () => {
  * 发布资源
  * 页面内容替换
  */
-gulp.task('publish', ['hasher'], () => {
+gulp.task('publish', ['hasher', 'build-img', 'build-fonts'], () => {
   let opts = {
     css: [
       getHash('assets-build/css/index.min.css')

@@ -1,6 +1,8 @@
+@import url(frame.css);
 @import url(home.css);
 @import url(event.css);
 @import url(realtime.css);
 @import url(../../node_modules/rc-table/assets/index.css);
 @import url(../../node_modules/rc-pagination/assets/index.css);
-@import url(menu.css);
+@import url(css.css);
+@import url(font-awesome.css);
