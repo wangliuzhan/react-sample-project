@@ -165,17 +165,12 @@ gulp.task('watch', ['build-app'], function() {
   })
 })
 
-gulp.task('lint', function() {
-  var report = getLintReport().results.filter((item) => {
-    return item.errorCount > 0 || item.warningCount > 0
-  })
-  console.log(report)
-})
-
 gulp.task('default', function() {
   var report = getLintReport()
   if (report.errorCount > 0) {
-    throw new Error('源码不规范，请检查。运行gulp lint查看详细结果')
+    let fileList = report.results.filter((item)=> item.errorCount > 0 || item.warningCount > 0)
+      .map((item)=> item.filePath)
+    throw new Error(`源码不规范，请检查这些文件：\n${fileList.join('\n')}\n\n`)
   }
 
   gulp.start('publish')
