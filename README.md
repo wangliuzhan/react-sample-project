@@ -77,4 +77,5 @@ React Highcharts需要先加载highcharts，目前highcharts直接作为全局�
 [React入门资源整理](https://github.com/simongfxu/simongfxu.github.com/issues/21)
 
 [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html)
+
 [A Compact React Cookbook](https://blog.oyanglul.us/javascript/react-cookbook-mini.html)
