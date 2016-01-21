@@ -78,4 +78,8 @@ React Highcharts需要先加载highcharts，目前highcharts直接作为全局�
 
 [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html)
 
-[A Compact React Cookbook](https://blog.oyanglul.us/javascript/react-cookbook-mini.html)
+[A Compact React Cookbook](https://blog.oyanglul.us/javascript/react-cookbook-mini.html)   
+
+[reactjs源码分析-上篇（首次渲染实现原理）](http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/)  
+
+[reactjs源码分析-下篇（更新机制实现原理）](http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_two/)
