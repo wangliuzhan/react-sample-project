@@ -83,3 +83,7 @@ React Highcharts需要先加载highcharts，目前highcharts直接作为全局�
 [reactjs源码分析-上篇（首次渲染实现原理）](http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/)  
 
 [reactjs源码分析-下篇（更新机制实现原理）](http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_two/)
+
+[React 源码剖析系列](http://segmentfault.com/a/1190000004003055)
+
+[React 的 diff 算法](http://segmentfault.com/a/1190000000606216)
