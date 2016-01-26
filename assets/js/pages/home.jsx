@@ -1,15 +1,25 @@
-import React from 'react'
+/**
+ * 数据中心，入口页面
+ */
+import React, {PropTypes} from 'react'
 import Header from '../widgets/header.jsx'
 import Footer from '../widgets/footer.jsx'
+import SideMenu from '../widgets/side_menu/root.jsx'
 
 export default React.createClass({
+  propTypes: {
+    children: PropTypes.any,
+    actions: PropTypes.object.isRequired,
+    states: PropTypes.object.isRequired
+  },
+
   render() {
-    var games = [
+    const games = [
       {appID: '1a', name: '权利的游戏'},
       {appID: '2b', name: '邪恶力量'}
     ]
 
-    var tbody = games.map((item) => {
+    const tbody = games.map((item) => {
       return (
         <tr key={item.appID}>
           <td>{item.name}</td>
@@ -21,7 +31,7 @@ export default React.createClass({
       )
     })
 
-    var gameCenter =  (
+    const gameCenter = (
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -36,11 +46,20 @@ export default React.createClass({
       </table>
     )
 
+    // 作为入口页面接收redux所有的actions，不然子组件无法找到
+    const body = !this.props.children ? gameCenter : React.cloneElement(this.props.children, {
+      actions: this.props.actions,
+      states: this.props.states
+    })
+
     return (
-      <div className="wrapper">
-        <Header />
-        {this.props.children || gameCenter}
-        <Footer />
+      <div className="wrapper" id="wrapper">
+        <SideMenu />
+        <div id="main">
+          <Header />
+          {body}
+          <Footer />
+        </div>
       </div>
     )
   }

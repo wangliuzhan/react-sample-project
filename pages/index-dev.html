@@ -4,13 +4,23 @@
   <meta charset="utf-8">
   <title>React sample project</title>
   <!-- build:css -->
-  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" />
-  <link rel="stylesheet" href="../assets/css/index.css">
+  <link rel="stylesheet" href="../assets-build/css/index.css">
   <!-- endbuild -->
 </head>
 <body>
 <div id="container"></div>
+<script>
+  (function() {
+    var useMock = true
+
+    window.App = {
+      // 生产环境自动排除mock
+      useMock: location.pathname.indexOf('-dev') > -1 && useMock
+    }
+  })()
+</script>
 <!-- build:js -->
 <script src="../assets-build/js/common.js"></script>
+<script src="../assets-build/js/highcharts.js"></script>
 <script src="../assets-build/js/app.js"></script>
 <!-- endbuild -->

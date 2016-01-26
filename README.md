@@ -1,15 +1,19 @@
 # react-sample-project
 
+[![Build Status](https://semaphoreci.com/api/v1/projects/309edeb5-1aba-4b9c-ad8b-f12f196d4c43/628496/badge.svg)](https://semaphoreci.com/damngoto/react-sample-project)
+
 React新手入门示例项目
 
 ## 工具集 tools
 
 > * React
 > * React Router
+> * React Highcharts
+> * Redux
 > * Browserify
 > * Gulp
 > * Babel
-> * npm
+> * jest
 
 ## 编辑器 Editor
 
@@ -33,10 +37,18 @@ npm run watch
 
 入口页面 pages/index-dev.html
 
+## 单元测试 Unit test
+
+```bash
+npm test
+```
+
+使用`jest`
+
 ## 发布 Build
 
 ```bash
-npm run build (gulp)
+gulp
 ```
 
 build改动:
@@ -46,8 +58,32 @@ build改动:
 
 ## 运行 Run
 
-运行一个本地静态服务器查看demo，可能需要先 `npm install -g puer`
+运行一个本地静态服务器查看demo，可能需要先 `npm install -g puer`，然后在项目根目录运行：
 
 ```bash
 puer .
 ```
+
+## Mock
+
+查看`assets/js/mocks/index.js`，使用`superagent-mocker`
+
+## 其它
+
+React Highcharts需要先加载highcharts，目前highcharts直接作为全局公共库加载
+
+## 资源推荐
+
+[React入门资源整理](https://github.com/simongfxu/simongfxu.github.com/issues/21)
+
+[Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html)
+
+[A Compact React Cookbook](https://blog.oyanglul.us/javascript/react-cookbook-mini.html)   
+
+[reactjs源码分析-上篇（首次渲染实现原理）](http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/)  
+
+[reactjs源码分析-下篇（更新机制实现原理）](http://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_two/)
+
+[React 源码剖析系列](http://segmentfault.com/a/1190000004003055)
+
+[React 的 diff 算法](http://segmentfault.com/a/1190000000606216)
